@@ -1,3 +1,7 @@
+#Ingore generated cmake files
+cmake/ECMConfig.cmake
+cmake/ECMConfigVersion.cmake
+
 # Ignore the following files
 *~
 *.[oa]
