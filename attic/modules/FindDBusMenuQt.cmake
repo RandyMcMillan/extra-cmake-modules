@@ -13,14 +13,13 @@
 # WARNING: versions below 0.4.0 cannot be checked for.
 # So if you want to have a version check, require at least 0.4.0 of dbusmenuqt.
 
-# Copyright (c) 2009, Canonical Ltd.
-# - Author: Aurélien Gâteau <aurelien.gateau@canonical.com>
-#
 # Based on FindQCA2.cmake
-# Copyright (c) 2006, Michael Larouche, <michael.larouche@kdemail.net>
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+# SPDX-FileCopyrightText: 2006 Michael Larouche <michael.larouche@kdemail.net>
+# SPDX-FileCopyrightText: 2009 Canonical Ltd.
+# SPDX-FileContributor: Aurélien Gâteau <aurelien.gateau@canonical.com>
+#
+# SPDX-License-Identifier: BSD-3-Clause
 
 include(FindPackageHandleStandardArgs)
 

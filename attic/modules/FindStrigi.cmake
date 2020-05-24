@@ -8,11 +8,9 @@
 #  STRIGI_LINE_ANALYZER_PREFIX - strigi plugin prefix
 #  STRIGI_THROUGH_ANALYZER_PREFIX - strigi plugin prefix
 
-# Copyright (c) 2008, Jos van den Oever, <jos@vandenoever.info>
+# SPDX-FileCopyrightText: 2008 Jos van den Oever <jos@vandenoever.info>
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
-
+# SPDX-License-Identifier: BSD-3-Clause
 
 if(NOT STRIGI_MIN_VERSION)
     set(STRIGI_MIN_VERSION "0.5.9")
@@ -26,8 +24,8 @@ find_package(Strigi QUIET NO_MODULE PATHS "${strigi_home}/lib/strigi" "${strigi_
 set(Strigi_FIND_QUIETLY ${_Strigi_FIND_QUIETLY})
 
 # If StrigiConfig.cmake (installed by kdesupport/Strigi) has been found
-# and it contains all necessary information (since November 16th, 2008), use the information 
-# included there, otherwise search it in the same way as any non-cmake project. 
+# and it contains all necessary information (since November 16th, 2008), use the information
+# included there, otherwise search it in the same way as any non-cmake project.
 # This variable is set by StrigiConfig.cmake .  Alex
 if (STRIGI_CONFIG_FOUND_AND_HAS_COMPLETE_INFORMATION)
    set (_strigiErrorMessage "Couldn't find Strigi streams and streamanalyzer libraries. Set the environment variable STRIGI_HOME (or CMAKE_PREFIX_PATH) to the strigi install dir.")
@@ -38,7 +36,7 @@ if (STRIGI_CONFIG_FOUND_AND_HAS_COMPLETE_INFORMATION)
    endif()
 
    include(FindPackageHandleStandardArgs)
-   find_package_handle_standard_args(Strigi 
+   find_package_handle_standard_args(Strigi
        "${_strigiErrorMessage}"
        STRIGI_STREAMS_LIBRARY  STRIGI_STREAMANALYZER_LIBRARY  STRIGI_INCLUDE_DIR  STRIGI_VERSION_OK)
 
@@ -61,7 +59,7 @@ else()
    endif()
 
    if (NOT STRIGI_INCLUDEDIR)
-       find_path(STRIGI_INCLUDE_DIR strigi/streamanalyzer.h 
+       find_path(STRIGI_INCLUDE_DIR strigi/streamanalyzer.h
             PATHS
             ${strigi_home}/include
             ${STRIGI_INCLUDEDIR}

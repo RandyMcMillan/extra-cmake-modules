@@ -5,8 +5,9 @@
 #     * PYKDE4_ADD_UI_FILES
 #     * PYKDE4_ADD_EXECUTABLE
 
-# By Simon Edwards <simon@simonzone.com>
-# This file is in the public domain.
+# SPDX-FileCopyrightText: Simon Edwards <simon@simonzone.com>
+#
+# SPDX-License-Identifier: CC-PDDC
 
 INCLUDE(FindPythonInterp)
 
@@ -31,7 +32,7 @@ IF(PYTHONINTERP_FOUND)
 
     # PyKDE4 doesn't install pykdeuic4 when installing via CMake.
     # Fortunately pykdeuic4 isn't needed by pate.
-    # 
+    #
     ## FIND_PROGRAM(PYKDE4_PYKDEUIC_EXE pykdeuic4 PATHS)# ${PYKDE4_BIN_DIR})
     ## IF(NOT PYKDE4_PYKDEUIC_EXE)
     ##     MESSAGE(FATAL_ERROR "ERROR: Could not find pykdeuic4 (part of PyKDE4)")
@@ -111,7 +112,7 @@ MACRO(PYKDE4_INSTALL_PYTHON_FILES)
         # Install the source file.
         INSTALL(FILES ${_current_file} DESTINATION ${DATA_INSTALL_DIR}/${PROJECT_NAME})
 
-        # Byte compile and install the .pyc file.        
+        # Byte compile and install the .pyc file.
         GET_FILENAME_COMPONENT(_absfilename ${_current_file} ABSOLUTE)
         GET_FILENAME_COMPONENT(_filename ${_current_file} NAME)
         GET_FILENAME_COMPONENT(_filenamebase ${_current_file} NAME_WE)

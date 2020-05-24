@@ -3,11 +3,9 @@
 #  GPHOTO2_INCLUDE_DIR - the GPHOTO2 include directory
 #  GPHOTO2_LIBRARIES - The libraries needed to use GPHOTO2
 
-# Copyright (c) 2006, 2007 Laurent Montel, <montel@kde.org>
+# SPDX-FileCopyrightText: 2006, 2007 Laurent Montel <montel@kde.org>
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
-
+# SPDX-License-Identifier: BSD-3-Clause
 
 option(KDE4_GPHOTO2 "do not build kamera (gphoto2 required)" ON)
 if (KDE4_GPHOTO2 )
@@ -15,8 +13,8 @@ if (KDE4_GPHOTO2 )
   	# in cache already
   		SET(GPHOTO2_FOUND TRUE)
 	ELSE (GPHOTO2_LIBRARIES AND GPHOTO2_INCLUDE_DIR)
-	
-  		FIND_PROGRAM(GHOTO2CONFIG_EXECUTABLE NAMES gphoto2-config 
+
+  		FIND_PROGRAM(GHOTO2CONFIG_EXECUTABLE NAMES gphoto2-config
   		)
 
   		FIND_PROGRAM(GHOTO2PORTCONFIG_EXECUTABLE NAMES gphoto2-port-config
@@ -27,7 +25,7 @@ if (KDE4_GPHOTO2 )
   		IF (GHOTO2PORTCONFIG_EXECUTABLE AND GHOTO2CONFIG_EXECUTABLE)
 			EXEC_PROGRAM(${GHOTO2PORTCONFIG_EXECUTABLE} ARGS --libs RETURN_VALUE _return_VALUE OUTPUT_VARIABLE GPHOTO2PORT_LIBRARY)
 			EXEC_PROGRAM(${GHOTO2CONFIG_EXECUTABLE} ARGS --libs RETURN_VALUE _return_VALUE OUTPUT_VARIABLE GPHOTO2_LIBRARY)
-			
+
             		EXEC_PROGRAM(${GHOTO2PORTCONFIG_EXECUTABLE} ARGS --cflags RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _GPHOTO2PORT_RESULT_INCLUDE_DIR)
             		EXEC_PROGRAM(${GHOTO2CONFIG_EXECUTABLE} ARGS --cflags RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _GPHOTO2_RESULT_INCLUDE_DIR)
 
@@ -44,7 +42,7 @@ if (KDE4_GPHOTO2 )
                                 set(GPHOTO2PORT_INCLUDE_DIR ${GPHOTO2PORT_INCLUDE_DIR} ${_includedir})
                         endforeach(_includedir)
 
-			
+
 
 			set(GPHOTO2_INCLUDE_DIRS ${GPHOTO2PORT_INCLUDE_DIR} ${GPHOTO2_INCLUDE_DIR} )
 		endif()

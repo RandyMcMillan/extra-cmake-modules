@@ -9,13 +9,11 @@
 #  LIBLZMA_HAS_LZMA_PRESET   - True if lzma_lzma_preset() is found (required).
 
 
-# Copyright (c) 2008, Per Øyvind Karlsen, <peroyvind@mandriva.org>
-# Copyright (c) 2009, Alexander Neundorf, <neundorf@kde.org>
-# Copyright (c) 2009, Helio Chissini de Castro, <helio@kde.org>
+# SPDX-FileCopyrightText: 2008 Per Øyvind Karlsen <peroyvind@mandriva.org>
+# SPDX-FileCopyrightText: 2009 Alexander Neundorf <neundorf@kde.org>
+# SPDX-FileCopyrightText: 2009 Helio Chissini de Castro <helio@kde.org>
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
-
+# SPDX-License-Identifier: BSD-3-Clause
 
 FIND_PATH(LIBLZMA_INCLUDE_DIR lzma.h )
 FIND_LIBRARY(LIBLZMA_LIBRARY lzma)
@@ -35,7 +33,7 @@ IF (LIBLZMA_LIBRARIES)
 ENDIF (LIBLZMA_LIBRARIES)
 
 INCLUDE(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(LIBLZMA  DEFAULT_MSG  LIBLZMA_INCLUDE_DIR 
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(LIBLZMA  DEFAULT_MSG  LIBLZMA_INCLUDE_DIR
                                                         LIBLZMA_LIBRARY
                                                         LIBLZMA_HAS_AUTO_DECODER
                                                         LIBLZMA_HAS_EASY_ENCODER

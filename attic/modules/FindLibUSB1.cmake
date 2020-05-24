@@ -5,12 +5,12 @@
 #  LibUSB1_INCLUDE_DIRS - the libusb-1.0 include directory
 #  LibUSB1_LIBRARIES - Link these to use libusb-1.0
 
-# Copyright (c) 2011, 2013 Yury Kudryashov, <urkud@ya.ru>
-# Based on FindUSB.cmake which is:
-#   Copyright (c) 2006, 2008  Laurent Montel, <montel@kde.org>
+# SPDX-FileCopyrightText: 2011, 2013 Yury Kudryashov <urkud@ya.ru>
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+# Based on FindUSB.cmake which is:
+# SPDX-FileCopyrightText: 2006, 2008 Laurent Montel <montel@kde.org>
+#
+# SPDX-License-Identifier: BSD-3-Clause
 
 # use pkg-config to get the directories and then use these values
 # in the FIND_PATH() and FIND_LIBRARY() calls

@@ -1,10 +1,8 @@
 # Find Avahi. Only avahi-common/defs.h is really needed
 
-# Copyright (c) 2007, Jakub Stachowski, <qbast@go2.pl>
+# SPDX-FileCopyrightText: 2007 Jakub Stachowski <qbast@go2.pl>
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
-
+# SPDX-License-Identifier: BSD-3-Clause
 
 find_path(AVAHI_INCLUDE_DIR avahi-common/defs.h)
 include(FindPackageHandleStandardArgs)

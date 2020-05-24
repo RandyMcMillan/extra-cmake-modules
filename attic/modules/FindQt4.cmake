@@ -345,7 +345,7 @@
 # (They make no sense in Qt4)
 #  QT_QT_LIBRARY        Qt-Library is now split
 
-# Copyright (c) 2002 Kitware, Inc., Insight Consortium.  All rights reserved.
+# SPDX-FileCopyrightText: 2002 Kitware , Inc., Insight Consortium.  All rights reserved.
 # See Copyright.txt or http://www.cmake.org/HTML/Copyright.html for details.
 
 # Use FIND_PACKAGE( Qt4 COMPONENTS ... ) to enable modules

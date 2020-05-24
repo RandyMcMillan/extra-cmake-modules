@@ -6,11 +6,10 @@
 #  GOBJECT_LIBRARIES - the libraries needed to use GObject
 #  GOBJECT_DEFINITIONS - Compiler switches required for using GObject
 
-# Copyright (c) 2011, Raphael Kubo da Costa <kubito@gmail.com>
-# Copyright (c) 2006, Tim Beaulen <tbscope@gmail.com>
+# SPDX-FileCopyrightText: 2011 Raphael Kubo da Costa <kubito@gmail.com>
+# SPDX-FileCopyrightText: 2006 Tim Beaulen <tbscope@gmail.com>
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+# SPDX-License-Identifier: BSD-3-Clause
 
 FIND_PACKAGE(PkgConfig)
 PKG_CHECK_MODULES(PC_GOBJECT gobject-2.0)
