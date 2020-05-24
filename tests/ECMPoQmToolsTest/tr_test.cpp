@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Alex Merry <alex.merry@kde.org>
+ * SPDX-FileCopyrightText: 2015 Alex Merry <alex.merry@kde.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions

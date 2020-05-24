@@ -1,4 +1,5 @@
-# By Simon Edwards <simon@simonzone.com>
-# This file is in the public domain.
+# SPDX-FileCopyrightText: Simon Edwards <simon@simonzone.com>
+# SPDX-License-Identifier: CC-PDDC
+
 import py_compile, sys
 sys.exit(py_compile.main())

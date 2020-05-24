@@ -1,33 +1,31 @@
 # - Try to find the KDEWIN library
-# 
+#
 # Once done this will define
 #
 #  KDEWIN_FOUND - system has KDEWIN
 #  KDEWIN_INCLUDES - the KDEWIN include directories
 #  KDEWIN_LIBRARIES - The libraries needed to use KDEWIN
 
-# Copyright (c) 2006, Alexander Neundorf, <neundorf@kde.org>
-# Copyright (c) 2007-2009, Ralf Habacker, <ralf.habacker@freenet.de>
+# SPDX-FileCopyrightText: 2006 Alexander Neundorf <neundorf@kde.org>
+# SPDX-FileCopyrightText: 2007-2009 Ralf Habacker <ralf.habacker@freenet.de>
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
-
+# SPDX-License-Identifier: BSD-3-Clause
 
 if (WIN32)
 
   if(WINCE)
     FIND_PACKAGE(WCECOMPAT REQUIRED)
   endif()
-    
+
   if (NOT KDEWIN_LIBRARY)
- 
+
 
     find_path(KDEWIN_INCLUDE_DIR kdewin_export.h
       ${KDE4_INCLUDE_DIR}
       ${CMAKE_INCLUDE_PATH}
       ${CMAKE_INSTALL_PREFIX}/include
     )
- 
+
     # search for kdewin in the default install directory for applications (default of (n)make install)
     FILE(TO_CMAKE_PATH "${CMAKE_LIBRARY_PATH}" _cmakeLibraryPathCmakeStyle)
 
@@ -40,7 +38,7 @@ if (WIN32)
 
     find_library(KDEWIN_LIBRARY
       NAMES ${LIBRARY_NAME}
-      PATHS 
+      PATHS
         ${KDE4_LIB_DIR}
         ${_cmakeLibraryPathCmakeStyle}
         ${CMAKE_INSTALL_PREFIX}/lib
@@ -74,7 +72,7 @@ if (WIN32)
   endif (KDEWIN_LIBRARY AND KDEWIN_INCLUDE_DIR)
   # required for configure
   set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES} ${KDEWIN_INCLUDES})
-  set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${KDEWIN_LIBRARIES})      
+  set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${KDEWIN_LIBRARIES})
 
   if (KDEWIN_FOUND)
     if (NOT KDEWin_FIND_QUIETLY)

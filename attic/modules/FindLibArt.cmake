@@ -5,11 +5,9 @@
 #  LIBART_INCLUDE_DIR - the LibArt include directory
 #  LIBART_LIBRARIES - The libraries needed to use LibArt
 
-# Copyright (c) 2006, Alexander Neundorf, <neundorf@kde.org>
+# SPDX-FileCopyrightText: 2006 Alexander Neundorf <neundorf@kde.org>
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
-
+# SPDX-License-Identifier: BSD-3-Clause
 
 if (LIBART_INCLUDE_DIR AND LIBART_LIBRARIES)
 
@@ -35,19 +33,19 @@ else (LIBART_INCLUDE_DIR AND LIBART_LIBRARIES)
      ${PC_LIBART_INCLUDE_DIRS}
      PATH_SUFFIXES libart-2.0
   )
-  
+
   FIND_LIBRARY(LIBART_LIBRARIES NAMES art_lgpl_2
      PATHS
      ${PC_LIBART_LIBDIR}
      ${PC_LIBART_LIBRARY_DIRS}
   )
-  
-  
+
+
   if (LIBART_INCLUDE_DIR AND LIBART_LIBRARIES)
      set(LIBART_FOUND TRUE)
   endif (LIBART_INCLUDE_DIR AND LIBART_LIBRARIES)
-  
-  
+
+
   if (LIBART_FOUND)
      if (NOT LibArt_FIND_QUIETLY)
         message(STATUS "Found libart: ${LIBART_LIBRARIES}")

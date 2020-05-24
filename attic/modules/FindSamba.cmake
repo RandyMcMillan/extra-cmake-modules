@@ -7,10 +7,9 @@
 #  Set SAMBA_REQUIRE_SMBC_SET_CONTEXT to TRUE if you need a version of Samba
 #  which comes with smbc_set_context()
 
-# Copyright (c) 2006, Alexander Neundorf, <neundorf@kde.org>
+# SPDX-FileCopyrightText: 2006 Alexander Neundorf <neundorf@kde.org>
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+# SPDX-License-Identifier: BSD-3-Clause
 
 if(SAMBA_INCLUDE_DIR AND SAMBA_LIBRARIES)
     # Already in cache, be silent
@@ -41,7 +40,7 @@ if(SAMBA_INCLUDE_DIR AND SAMBA_LIBRARIES)
    if (SAMBA_REQUIRE_SMBC_OPTION_SET AND NOT SAMBA_HAVE_SMBC_OPTION_SET)
       set(SAMBA_FOUND FALSE)
    endif (SAMBA_REQUIRE_SMBC_OPTION_SET AND NOT SAMBA_HAVE_SMBC_OPTION_SET)
-   
+
 else()
    set(SAMBA_FOUND FALSE)
    set(SAMBA_HAVE_SMBC_SET_CONTEXT FALSE)

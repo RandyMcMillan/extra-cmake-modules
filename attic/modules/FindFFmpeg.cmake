@@ -6,12 +6,10 @@
 #  FFMPEG_LIBRARIES - Link these to use ffmpeg
 #  FFMPEG_DEFINITIONS - Compiler switches required for using ffmpeg
 
-# Copyright (c) 2006, Matthias Kretz, <kretz@kde.org>
-# Copyright (c) 2008, Alexander Neundorf, <neundorf@kde.org>
+# SPDX-FileCopyrightText: 2006 Matthias Kretz <kretz@kde.org>
+# SPDX-FileCopyrightText: 2008 Alexander Neundorf <neundorf@kde.org>
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
-
+# SPDX-License-Identifier: BSD-3-Clause
 
 if (FFMPEG_LIBRARIES)
 
@@ -107,7 +105,7 @@ endif (NOT WIN32)
     endif (FFmpeg_FIND_REQUIRED)
   endif (FFMPEG_FOUND)
 
-  mark_as_advanced(AVCODEC_LIBRARIES 
+  mark_as_advanced(AVCODEC_LIBRARIES
                    AVFORMAT_LIBRARIES
                    AVUTIL_LIBRARIES
                    FFMPEG_INCLUDE_DIR

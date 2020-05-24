@@ -10,11 +10,10 @@
 # functionality can also reside in standalone Gettext library, or the one
 # embedded within kdelibs (cf. gettext.m4 from Gettext source).
 
-# Copyright (c) 2006, Chusslove Illich, <caslav.ilic@gmx.net>
-# Copyright (c) 2007, Alexander Neundorf, <neundorf@kde.org>
+# SPDX-FileCopyrightText: 2006 Chusslove Illich <caslav.ilic@gmx.net>
+# SPDX-FileCopyrightText: 2007 Alexander Neundorf <neundorf@kde.org>
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+# SPDX-License-Identifier: BSD-3-Clause
 
 if(LIBINTL_INCLUDE_DIR AND LIBINTL_LIB_FOUND)
   set(Libintl_FIND_QUIETLY TRUE)

@@ -5,11 +5,9 @@
 #  PCRE_INCLUDE_DIR - the PCRE include directory
 #  PCRE_LIBRARIES - The libraries needed to use PCRE
 
-# Copyright (c) 2006, Alexander Neundorf, <neundorf@kde.org>
+# SPDX-FileCopyrightText: 2006 Alexander Neundorf <neundorf@kde.org>
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
-
+# SPDX-License-Identifier: BSD-3-Clause
 
 if (PCRE_INCLUDE_DIR AND PCRE_PCREPOSIX_LIBRARY AND PCRE_PCRE_LIBRARY)
   # Already in cache, be silent
@@ -28,8 +26,8 @@ if (NOT WIN32)
 
 endif (NOT WIN32)
 
-find_path(PCRE_INCLUDE_DIR pcre.h 
-          HINTS ${PC_PCRE_INCLUDEDIR} ${PC_PCRE_INCLUDE_DIRS} 
+find_path(PCRE_INCLUDE_DIR pcre.h
+          HINTS ${PC_PCRE_INCLUDEDIR} ${PC_PCRE_INCLUDE_DIRS}
           PATH_SUFFIXES pcre)
 
 find_library(PCRE_PCRE_LIBRARY NAMES pcre pcred HINTS ${PC_PCRE_LIBDIR} ${PC_PCRE_LIBRARY_DIRS})

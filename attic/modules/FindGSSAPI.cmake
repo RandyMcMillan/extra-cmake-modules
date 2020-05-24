@@ -6,11 +6,9 @@
 #  GSSAPI_LIBS - the libraries needed to use GSSAPI
 #  GSSAPI_FLAVOR - the type of API - MIT or HEIMDAL
 
-# Copyright (c) 2006, Pino Toscano, <toscano.pino@tiscali.it>
+# SPDX-FileCopyrightText: 2006 Pino Toscano <toscano.pino@tiscali.it>
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
-
+# SPDX-License-Identifier: BSD-3-Clause
 
 if(GSSAPI_LIBS AND GSSAPI_FLAVOR)
 
@@ -24,21 +22,21 @@ else()
      ONLY_CMAKE_FIND_ROOT_PATH               # this is required when cross compiling with cmake 2.6 and ignored with cmake 2.4, Alex
   )
   mark_as_advanced(KRB5_CONFIG)
-  
+
   #reset vars
   set(GSSAPI_INCS)
   set(GSSAPI_LIBS)
   set(GSSAPI_FLAVOR)
-  
+
   if(KRB5_CONFIG)
-  
+
     set(HAVE_KRB5_GSSAPI TRUE)
     exec_program(${KRB5_CONFIG} ARGS --libs gssapi RETURN_VALUE _return_VALUE OUTPUT_VARIABLE GSSAPI_LIBS)
     if(_return_VALUE)
       message(STATUS "GSSAPI configure check failed.")
       set(HAVE_KRB5_GSSAPI FALSE)
     endif()
-  
+
     exec_program(${KRB5_CONFIG} ARGS --cflags gssapi RETURN_VALUE _return_VALUE OUTPUT_VARIABLE GSSAPI_INCS)
     string(REGEX REPLACE "(\r?\n)+$" "" GSSAPI_INCS "${GSSAPI_INCS}")
     string(REGEX REPLACE " *-I" ";" GSSAPI_INCS "${GSSAPI_INCS}")
@@ -50,7 +48,7 @@ else()
     else()
       set(GSSAPI_FLAVOR "HEIMDAL")
     endif()
-  
+
     if(NOT HAVE_KRB5_GSSAPI)
       if (gssapi_flavor_tmp MATCHES "Sun Microsystems.*")
          message(STATUS "Solaris Kerberos does not have GSSAPI; this is normal.")
@@ -72,7 +70,7 @@ else()
       mark_as_advanced(GSSAPI_INCS GSSAPI_LIBS GSSAPI_FLAVOR)
 
     endif()
-  
+
   endif()
 
 endif()

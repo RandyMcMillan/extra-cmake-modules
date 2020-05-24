@@ -9,7 +9,7 @@
 #  HUPNP_VERSION_MINOR - The minor version of HUpnp
 #  HUPNP_VERSION_PATCH - The patch version of HUpnp
 #
-# Copyright (c) 2010, Paulo Romulo Alves Barros <paulo.romulo@kdemail.net>
+# SPDX-FileCopyrightText: 2010 Paulo Romulo Alves Barros <paulo.romulo@kdemail.net>
 
 find_path( HUPNP_INCLUDE_DIR HUpnpCore/HUpnp )
 
