@@ -1,8 +1,8 @@
 # Macros for SIP
 # ~~~~~~~~~~~~~~
-# SPDX-FileCopyrightText: 2007 Simon Edwards <simon@simonzone.com>
-#
-# SPDX-License-Identifier: BSD-3-Clause
+# Copyright (c) 2007, Simon Edwards <simon@simonzone.com>
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 # SIP website: http://www.riverbankcomputing.co.uk/sip/index.php
 #
@@ -103,9 +103,9 @@ MACRO(ADD_SIP_PYTHON_MODULE MODULE_NAME MODULE_SIP)
         ENDFOREACH(filename ${_sip_output_files})
     ENDIF(NOT WIN32)
     ADD_CUSTOM_COMMAND(
-        OUTPUT ${_sip_output_files}
+        OUTPUT ${_sip_output_files} 
         COMMAND ${CMAKE_COMMAND} -E echo ${message}
-        COMMAND ${TOUCH_COMMAND} ${_sip_output_files}
+        COMMAND ${TOUCH_COMMAND} ${_sip_output_files} 
         COMMAND ${SIP_EXECUTABLE} ${_sip_tags} ${_sip_x} ${SIP_EXTRA_OPTIONS} -j ${SIP_CONCAT_PARTS} -c ${CMAKE_CURRENT_SIP_OUTPUT_DIR} ${_sip_includes} ${_abs_module_sip}
         DEPENDS ${_abs_module_sip} ${SIP_EXTRA_FILES_DEPEND}
     )

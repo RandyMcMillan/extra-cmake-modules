@@ -3,9 +3,10 @@
 #  IOKIT_LIBRARY - the library to use IOKit
 #  IOKIT_FOUND - true if IOKit has been found
 
-# SPDX-FileCopyrightText: 2009 Harald Fernengel <harry@kdevelop.org>
+# Copyright (c) 2009, Harald Fernengel <harry@kdevelop.org>
 #
-# SPDX-License-Identifier: BSD-3-Clause
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 include(CMakeFindFrameworks)
 

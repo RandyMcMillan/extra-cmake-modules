@@ -8,9 +8,10 @@
 #
 # need more test: look at into dnssd/configure.in.in
 
-# SPDX-FileCopyrightText: 2006 Laurent Montel <montel@kde.org>
+# Copyright (c) 2006, Laurent Montel, <montel@kde.org>
 #
-# SPDX-License-Identifier: BSD-3-Clause
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 FIND_PATH(DNSSD_INCLUDE_DIR dns_sd.h
   /usr/include/avahi-compat-libdns_sd/

@@ -3,9 +3,11 @@
 # and sets all the given vaiables either to 0 or 1
 # depending on the value of the first one
 
-# SPDX-FileCopyrightText: 2006 Alexander Neundorf <neundorf@kde.org>
+# Copyright (c) 2006, Alexander Neundorf, <neundorf@kde.org>
 #
-# SPDX-License-Identifier: BSD-3-Clause
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+
 
 MACRO(MACRO_BOOL_TO_01 FOUND_VAR )
    FOREACH (_current_VAR ${ARGN})

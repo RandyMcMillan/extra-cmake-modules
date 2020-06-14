@@ -6,10 +6,11 @@
 #  XMMS_LIBRARIES    - Link these to use xmms
 #  XMMS_LDFLAGS      - for compatibility only, same as XMMS_LIBRARIES
 
-# SPDX-FileCopyrightText: 2006, 2007 Laurent Montel <montel@kde.org>
-# SPDX-FileCopyrightText: 2007 Allen Winter <winter@kde.org>
+# Copyright (c) 2006, 2007 Laurent Montel, <montel@kde.org>
+# Copyright (c) 2007 Allen Winter <winter@kde.org>
 #
-# SPDX-License-Identifier: BSD-3-Clause
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 if (XMMS_INCLUDE_DIRS AND XMMS_LIBRARIES)
   # in cache already
@@ -25,7 +26,7 @@ else (XMMS_INCLUDE_DIRS AND XMMS_LIBRARIES)
   endif()
 
   find_path(XMMS_INCLUDE_DIRS xmmsctrl.h
-    PATHS ${PC_XMMS_INCLUDEDIR} ${PC_XMMS_INCLUDE_DIRS}
+    PATHS ${PC_XMMS_INCLUDEDIR} ${PC_XMMS_INCLUDE_DIRS} 
     PATH_SUFFIXES xmms)
 
   find_library(XMMS_LIBRARIES NAMES xmms

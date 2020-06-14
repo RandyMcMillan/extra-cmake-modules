@@ -6,9 +6,10 @@
 #  PHONON_LIBS     - link these to use Phonon
 #  PHONON_VERSION  - the version of the Phonon Library
 
-# SPDX-FileCopyrightText: 2008 Matthias Kretz <kretz@kde.org>
+# Copyright (c) 2008, Matthias Kretz <kretz@kde.org>
 #
-# SPDX-License-Identifier: BSD-3-Clause
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 macro(_phonon_find_version)
    set(_phonon_namespace_header_file "${PHONON_INCLUDE_DIR}/phonon/phononnamespace.h")

@@ -1,8 +1,9 @@
 # Python macros
 # ~~~~~~~~~~~~~
-# SPDX-FileCopyrightText: 2007 Simon Edwards <simon@simonzone.com>
+# Copyright (c) 2007, Simon Edwards <simon@simonzone.com>
 #
-# SPDX-License-Identifier: BSD-3-Clause
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 # This file defines the following macros:
 #
@@ -22,7 +23,7 @@ MACRO(PYTHON_INSTALL SOURCE_FILE DESINATION_DIR)
   # Install the source file.
   INSTALL(FILES ${SOURCE_FILE} DESTINATION ${DESINATION_DIR})
 
-  # Byte compile and install the .pyc file.
+  # Byte compile and install the .pyc file.        
   GET_FILENAME_COMPONENT(_absfilename ${SOURCE_FILE} ABSOLUTE)
   GET_FILENAME_COMPONENT(_filename ${SOURCE_FILE} NAME)
   GET_FILENAME_COMPONENT(_filenamebase ${SOURCE_FILE} NAME_WE)
@@ -50,7 +51,7 @@ MACRO(PYTHON_INSTALL SOURCE_FILE DESINATION_DIR)
   ELSE(_abs_bin_py STREQUAL ${_absfilename})
     ADD_CUSTOM_COMMAND(
       TARGET compile_python_files
-      COMMAND ${CMAKE_COMMAND} -E echo ${message}
+      COMMAND ${CMAKE_COMMAND} -E echo ${message} 
       COMMAND ${CMAKE_COMMAND} -E copy ${_absfilename} ${_bin_py}
       COMMAND ${PYTHON_EXECUTABLE} ${_python_compile_py} ${_bin_py}
       DEPENDS ${_absfilename}

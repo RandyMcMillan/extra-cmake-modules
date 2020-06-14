@@ -5,9 +5,10 @@
 #  TAGLIB_CFLAGS - the taglib cflags
 #  TAGLIB_LIBRARIES - The libraries needed to use taglib
 
-# SPDX-FileCopyrightText: 2006 Laurent Montel <montel@kde.org>
+# Copyright (c) 2006, Laurent Montel, <montel@kde.org>
 #
-# SPDX-License-Identifier: BSD-3-Clause
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 if(NOT TAGLIB_MIN_VERSION)
   set(TAGLIB_MIN_VERSION "1.4")
@@ -42,7 +43,7 @@ if(TAGLIBCONFIG_EXECUTABLE)
         message(STATUS "Found taglib: ${TAGLIB_LIBRARIES}")
      endif()
      string(REGEX REPLACE " *-I" ";" TAGLIB_INCLUDES "${TAGLIB_CFLAGS}")
-  endif()
+  endif() 
   mark_as_advanced(TAGLIB_CFLAGS TAGLIB_LIBRARIES TAGLIB_INCLUDES)
 
 else()
@@ -66,8 +67,8 @@ else()
     ${KDE4_LIB_DIR}
     ${LIB_INSTALL_DIR}
   )
-
-  find_package_handle_standard_args(Taglib DEFAULT_MSG
+  
+  find_package_handle_standard_args(Taglib DEFAULT_MSG 
                                     TAGLIB_INCLUDES TAGLIB_LIBRARIES)
 endif()
 

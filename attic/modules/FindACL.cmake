@@ -4,9 +4,10 @@
 #  ACL_FOUND - system has the ACL library
 #  ACL_LIBS - The libraries needed to use ACL
 
-# SPDX-FileCopyrightText: 2006 Pino Toscano <toscano.pino@tiscali.it>
+# Copyright (c) 2006, Pino Toscano, <toscano.pino@tiscali.it>
 #
-# SPDX-License-Identifier: BSD-3-Clause
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 include(CheckIncludeFiles)
 

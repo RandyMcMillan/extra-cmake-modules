@@ -7,10 +7,12 @@
 #  NETWORKMANAGER_CFLAGS - Compiler switches required for using NetworkManager
 #  NETWORKMANAGER_VERSION - version number of NetworkManager
 
-# SPDX-FileCopyrightText: 2006 Alexander Neundorf <neundorf@kde.org>
-# SPDX-FileCopyrightText: 2007 Will Stephenson <wstephenson@kde.org>
+# Copyright (c) 2006, Alexander Neundorf, <neundorf@kde.org>
+# Copyright (c) 2007, Will Stephenson, <wstephenson@kde.org>
 #
-# SPDX-License-Identifier: BSD-3-Clause
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+
 
 IF (NETWORKMANAGER_INCLUDE_DIRS AND NM-UTIL_INCLUDE_DIRS)
    # in cache already

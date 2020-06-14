@@ -5,10 +5,10 @@
 #  QIMAGEBLITZ_INCLUDES - the qimageblitz include directory
 #  QIMAGEBLITZ_LIBRARIES - The libraries needed to use qimageblitz
 
-# SPDX-FileCopyrightText: 2006 Montel Laurent <montel@kde.org>
-# SPDX-FileCopyrightText: 2007 Allen Winter <winter@kde.org>
-#
-# SPDX-License-Identifier: BSD-3-Clause
+# Copyright (c) 2006, Montel Laurent, <montel@kde.org>
+# Copyright (c) 2007, Allen Winter, <winter@kde.org>
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 include(FindLibraryWithDebug)
 
@@ -45,7 +45,7 @@ find_library_with_debug(QIMAGEBLITZ_LIBRARIES
 )
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(QImageBlitz DEFAULT_MSG
+find_package_handle_standard_args(QImageBlitz DEFAULT_MSG 
                                   QIMAGEBLITZ_INCLUDES QIMAGEBLITZ_LIBRARIES)
 
 mark_as_advanced(QIMAGEBLITZ_INCLUDES QIMAGEBLITZ_LIBRARIES)

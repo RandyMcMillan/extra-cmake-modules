@@ -5,9 +5,10 @@
 #    This macro works in any of the CMakeLists.txt of your project, but the recommended
 #    location to call this is close to the beginning of the top level CMakeLists.txt
 
-# SPDX-FileCopyrightText: 2006 Alexander Neundorf <neundorf@kde.org>
+# Copyright (c) 2006, Alexander Neundorf, <neundorf@kde.org>
 #
-# SPDX-License-Identifier: BSD-3-Clause
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 MACRO (MACRO_ENSURE_OUT_OF_SOURCE_BUILD _errorMessage)
 

@@ -8,10 +8,11 @@
 #  XINE_LIBRARY - The libraries needed to use XINE
 #  XINE_XCB_FOUND - libxine can use XCB for video output
 
-# SPDX-FileCopyrightText: 2006, 2007 Laurent Montel <montel@kde.org>
-# SPDX-FileCopyrightText: 2006 Matthias Kretz <kretz@kde.org>
+# Copyright (c) 2006,2007 Laurent Montel, <montel@kde.org>
+# Copyright (c) 2006, Matthias Kretz, <kretz@kde.org>
 #
-# SPDX-License-Identifier: BSD-3-Clause
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 if (XINE_INCLUDE_DIR AND XINE_LIBRARY)
   # Already in cache, be silent
@@ -23,10 +24,10 @@ if (PKG_CONFIG_FOUND)
    pkg_check_modules(PC_LIBXINE QUIET libxine)
 endif (PKG_CONFIG_FOUND)
 
-find_path(XINE_INCLUDE_DIR NAMES xine.h
+find_path(XINE_INCLUDE_DIR NAMES xine.h 
     HINTS                    # HINTS is new in cmake 2.6. These dirs will be preferred over the default ones
-    ${PC_LIBXINE_INCLUDEDIR}
-    ${PC_LIBXINE_INCLUDE_DIRS}
+    ${PC_LIBXINE_INCLUDEDIR} 
+    ${PC_LIBXINE_INCLUDE_DIRS} 
     )
 
 find_library(XINE_LIBRARY NAMES xine
@@ -35,7 +36,7 @@ find_library(XINE_LIBRARY NAMES xine
   ${PC_LIBXINE_LIBRARY_DIRS}
  )
 
-find_program(XINECONFIG_EXECUTABLE NAMES xine-config
+find_program(XINECONFIG_EXECUTABLE NAMES xine-config 
    HINTS
    ${PC_LIBXINE_PREFIX}/bin
 )
