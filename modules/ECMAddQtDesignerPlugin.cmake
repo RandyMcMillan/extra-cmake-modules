@@ -327,7 +327,7 @@ public:
     {}
 
     ~${_factory_classname}() override {}
-
+    
 public: // QDesignerCustomWidgetInterface API
     bool isInitialized() const override { return m_initialized; }
 ${_dom_xml_method}
@@ -344,7 +344,7 @@ ${_dom_xml_method}
 ${ECM_QTDESIGNERPLUGIN_${widget}_CREATE_WIDGET_CODE}
     }
 
-    void initialize(QDesignerFormEditorInterface* core) override
+    void initialize(QDesignerFormEditorInterface* core) override 
     {
 ${_initialize_code}
     }

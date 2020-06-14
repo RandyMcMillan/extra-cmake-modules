@@ -59,4 +59,4 @@ else()
    set(Inotify_FOUND FALSE)
 endif()
 
-mark_as_advanced(Inotify_LIBRARIES Inotify_INCLUDE_DIRS)
+mark_as_advanced(Inotify_LIBRARIES Inotify_INCLUDE_DIRS) 
