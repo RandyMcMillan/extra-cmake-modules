@@ -20,8 +20,11 @@
 # SIP_DEFAULT_SIP_DIR - Default directory where .sip files should be installed
 #     into.
 
-# SPDX-FileCopyrightText: 2007 Simon Edwards <simon@simonzone.com>
-# SPDX-License-Identifier: BSD-3-Clause
+# Copyright (c) 2007, Simon Edwards <simon@simonzone.com>
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+
+
 
 IF(SIP_VERSION)
   # Already in cache, be silent

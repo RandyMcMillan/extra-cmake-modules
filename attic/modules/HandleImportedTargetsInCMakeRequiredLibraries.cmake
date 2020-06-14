@@ -1,6 +1,6 @@
 
-# This is a helper function used by CheckCXXSourceRuns.cmake and
-# CheckCXXSourceCompiles.cmake. Actually it should be used by all macros which
+# This is a helper function used by CheckCXXSourceRuns.cmake and 
+# CheckCXXSourceCompiles.cmake. Actually it should be used by all macros which 
 # use TRY_COMPILE() or TRY_RUN().
 # It takes the CMAKE_REQUIRED_LIBRARY variable and searches it for imported
 # (library) targets. Since the project created by TRY_COMPILE() (and TRY_RUN())
@@ -11,9 +11,10 @@
 # and the link interface libraries, which includes e.g. /opt/kdelibs/lib/libkdecore.so.
 # This way imported targets work also when used with CHECK_CXX_SOURCE_COMPILES/RUNS().
 
-# SPDX-FileCopyrightText: 2009 Alexander Neundorf <neundorf@kde.org>
+# Copyright (c) 2009, Alexander Neundorf, <neundorf@kde.org>
 #
-# SPDX-License-Identifier: BSD-3-Clause
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 FUNCTION(HANDLE_IMPORTED_TARGETS_IN_CMAKE_REQUIRED_LIBRARIES _RESULT)
 # handle imported library targets
@@ -53,7 +54,7 @@ FUNCTION(HANDLE_IMPORTED_TARGETS_IN_CMAKE_REQUIRED_LIBRARIES _RESULT)
 #                   MESSAGE(STATUS "Appending link interface lib ${_currentLinkInterfaceLib}")
                   IF(_currentLinkInterfaceLib)
                      LIST(APPEND _CCSR_NEW_REQ_LIBS ${_currentLinkInterfaceLib} )
-                  ENDIF(_currentLinkInterfaceLib)
+                  ENDIF(_currentLinkInterfaceLib) 
                ENDFOREACH(_currentLinkInterfaceLib ${_linkInterfaceLibs})
             ENDIF(_linkInterfaceLibs)
          ELSE(_importedConfigs)

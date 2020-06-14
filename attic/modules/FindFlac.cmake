@@ -9,10 +9,11 @@
 # No version checking is done - use FLAC_API_VERSION_CURRENT to
 # conditionally compile version-dependent code
 
-# SPDX-FileCopyrightText: 2006 Laurent Montel <montel@kde.org>
-# SPDX-FileCopyrightText: 2006 Alexander Neundorf <neundorf@kde.org>
+# Copyright (c) 2006, Laurent Montel, <montel@kde.org>
+# Copyright (c) 2006, Alexander Neundorf, <neundorf@kde.org>
 #
-# SPDX-License-Identifier: BSD-3-Clause
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 FIND_PATH(FLAC_INCLUDE_DIR FLAC/metadata.h)
 

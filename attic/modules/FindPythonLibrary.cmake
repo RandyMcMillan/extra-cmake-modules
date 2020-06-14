@@ -12,7 +12,7 @@
 # PYTHON_LONG_VERSION - The version of the Python interpreter found as a human
 #     readable string.
 #
-# PYTHON_SITE_PACKAGES_INSTALL_DIR - this cache variable can be used for installing
+# PYTHON_SITE_PACKAGES_INSTALL_DIR - this cache variable can be used for installing 
 #                              own python modules. You may want to adjust this to be the
 #                              same as ${PYTHON_SITE_PACKAGES_DIR}, but then admin
 #                              privileges may be required for installation.
@@ -23,9 +23,11 @@
 #
 # PYTHON_LIBRARY, PYTHON_LIBRARIES- Location of the Python library.
 
-# SPDX-FileCopyrightText: 2007 Simon Edwards <simon@simonzone.com>
-#
-# SPDX-License-Identifier: BSD-3-Clause
+# Copyright (c) 2007, Simon Edwards <simon@simonzone.com>
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+
+
 
 include(CMakeFindFrameworks)
 

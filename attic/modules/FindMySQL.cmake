@@ -9,9 +9,10 @@
 #  MYSQL_FOUND, If false, do not try to use MySQL.
 #  MYSQL_EMBEDDED_FOUND, If false, do not try to use MySQL Embedded.
 
-# SPDX-FileCopyrightText: 2006-2008 Jarosław Staniek <staniek@kde.org>
+# Copyright (c) 2006-2008, Jarosław Staniek <staniek@kde.org>
 #
-# SPDX-License-Identifier: BSD-3-Clause
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 include(CheckCXXSourceCompiles)
 include(MacroPushRequiredVars)
@@ -69,7 +70,7 @@ else()
       $ENV{MYSQL_DIR}/lib/mysql
       /usr/local/mysql/lib
       /opt/mysql/mysql/lib
-      PATH_SUFFIXES
+      PATH_SUFFIXES 
       mysql
    )
 endif()

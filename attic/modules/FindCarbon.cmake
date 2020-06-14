@@ -3,9 +3,10 @@
 #  CARBON_LIBRARY - the library to use Carbon
 #  CARBON_FOUND - true if Carbon has been found
 
-# SPDX-FileCopyrightText: 2006 Benjamin Reed <ranger@befunk.com>
+# Copyright (c) 2006, Benjamin Reed, <ranger@befunk.com>
 #
-# SPDX-License-Identifier: BSD-3-Clause
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 include(CMakeFindFrameworks)
 

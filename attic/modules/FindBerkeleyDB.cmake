@@ -6,9 +6,10 @@
 #  BERKELEY_DB_LIBRARIES - Link these to use Berkeley DB
 #  BERKELEY_DB_DEFINITIONS - Compiler switches required for using Berkeley DB
 
-# SPDX-FileCopyrightText: 2006 Alexander Dymo <adymo@kdevelop.org>
+# Copyright (c) 2006, Alexander Dymo, <adymo@kdevelop.org>
 #
-# SPDX-License-Identifier: BSD-3-Clause
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 find_path(BERKELEY_DB_INCLUDE_DIR db.h
   /usr/include/db4

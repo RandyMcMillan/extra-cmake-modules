@@ -6,9 +6,11 @@
 #  ENCHANT_LIBRARIES - Link these to use ENCHANT
 #  ENCHANT_DEFINITIONS - Compiler switches required for using ENCHANT
 
-# SPDX-FileCopyrightText: 2006 Zack Rusin <zack@kde.org>
+# Copyright (c) 2006, Zack Rusin, <zack@kde.org>
 #
-# SPDX-License-Identifier: BSD-3-Clause
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+
 
 if (ENCHANT_INCLUDE_DIR AND ENCHANT_LIBRARIES)
 
@@ -24,7 +26,7 @@ else (ENCHANT_INCLUDE_DIR AND ENCHANT_LIBRARIES)
     set(ENCHANT_DEFINITIONS ${PC_ENCHANT_CFLAGS_OTHER})
   endif (NOT WIN32)
 
-  find_path(ENCHANT_INCLUDE_DIR
+  find_path(ENCHANT_INCLUDE_DIR 
             NAMES enchant++.h
             HINTS ${PC_ENCHANT_INCLUDEDIR}
                   ${PC_ENCHANT_INCLUDE_DIRS}

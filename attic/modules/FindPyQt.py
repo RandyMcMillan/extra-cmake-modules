@@ -1,7 +1,7 @@
-# SPDX-FileCopyrightText: 2007 Simon Edwards <simon@simonzone.com>
-# SPDX-FileCopyrightText: 2014 Raphael Kubo da Costa <rakuco@FreeBSD.org>
-#
-# SPDX-License-Identifier: BSD-3-Clause
+# Copyright (c) 2007, Simon Edwards <simon@simonzone.com>
+# Copyright (c) 2014, Raphael Kubo da Costa <rakuco@FreeBSD.org>
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 import PyQt4.QtCore
 import os

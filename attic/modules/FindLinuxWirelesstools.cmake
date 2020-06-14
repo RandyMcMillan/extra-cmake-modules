@@ -5,9 +5,11 @@
 #  IW_INCLUDE_DIR - the IW include directory
 #  IW_LIBRARIES - Link to these to use IW
 
-# SPDX-FileCopyrightText: 2006 Thorsten Roeder <thorsten.roeder@weihenstephan.org>
+# Copyright (c) 2006, Thorsten Roeder, <thorsten.roeder@weihenstephan.org>
 #
-# SPDX-License-Identifier: BSD-3-Clause
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+
 
 IF (IW_INCLUDE_DIR)
   # Already in cache, be silent

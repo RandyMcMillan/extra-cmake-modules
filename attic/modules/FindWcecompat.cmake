@@ -5,9 +5,9 @@
 #  WCECOMPAT_INCLUDE_DIR - Wcecompat include directory
 #  WCECOMPAT_LIBRARIES - Libraries needed to use Wcecompat
 #
-# SPDX-FileCopyrightText: 2010 Andreas Holzammer <andy@kdab.com>
+# Copyright (c) 2010, Andreas Holzammer, <andy@kdab.com>
 #
-# SPDX-License-Identifier: BSD-3-Clause
+# Redistribution and use is allowed according to the terms of the BSD license.
 
 find_path(WCECOMPAT_INCLUDE_DIR errno.h PATH_SUFFIXES wcecompat)
 

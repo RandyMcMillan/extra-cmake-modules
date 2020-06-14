@@ -1,9 +1,14 @@
 # This file is included by FindQt4.cmake, don't include it directly.
 
 #=============================================================================
-# SPDX-FileCopyrightText: 2005-2009 Kitware, Inc.
+# Copyright 2005-2009 Kitware, Inc.
 #
-# SPDX-License-Identifier: BSD-3-Clause
+# Distributed under the OSI-approved BSD License (the "License");
+# see accompanying file Copyright.txt for details.
+#
+# This software is distributed WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the License for more information.
 #=============================================================================
 # (To distributed this file outside of CMake, substitute the full
 #  License text for the above reference.)
@@ -11,11 +16,11 @@
 
 ###############################################
 #
-#       configuration/system dependent settings
+#       configuration/system dependent settings  
 #
 ###############################################
 
-# this check for X11 and threads may not be necessary, since it is not
+# this check for X11 and threads may not be necessary, since it is not 
 # contained in the cmake version of FindQt4.cmake:
 
 # for unix add X11 stuff
@@ -74,7 +79,7 @@ ENDIF(WIN32  AND  NOT QT_IS_STATIC)
 QT_QUERY_QMAKE(QMAKE_LIBS_OPENGL "QMAKE_LIBS_OPENGL")
 IF(Q_WS_MAC)
 # On the Mac OpenGL is probably frameworks and QMAKE_LIBS_OPENGL can be e.g. "-framework OpenGL -framework AGL".
-# The separate_arguments() call in the other branch makes "-framework;-OpenGL;-framework;-lAGL" appear in the
+# The separate_arguments() call in the other branch makes "-framework;-OpenGL;-framework;-lAGL" appear in the 
 # linker command. So we need to protect the "-framework foo" as non-separatable strings.
 # We do this by replacing the space after "-framework" with an underscore, then calling separate_arguments(),
 # and then we replace the underscores again with spaces. So we get proper linker commands. Alex
