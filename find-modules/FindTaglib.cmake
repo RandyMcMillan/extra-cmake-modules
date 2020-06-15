@@ -93,6 +93,7 @@ if(TaglibConfig_EXECUTABLE)
 else()
     find_path(TAGLIB_INCLUDES
         NAMES tag.h
+        PATH_SUFFIXES taglib
         PATHS ${INCLUDE_INSTALL_DIR}
     )
 
