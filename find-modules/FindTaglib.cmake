@@ -80,12 +80,6 @@ if(TaglibConfig_EXECUTABLE)
             Taglib_VERSION
     )
 
-    # Deprecated synonyms
-    set(TAGLIB_CFLAGS "${Taglib_CFLAGS}")
-    set(TAGLIB_INCLUDES "${Taglib_INCLUDE_DIRS}")
-    set(TAGLIB_LIBRARIES "${Taglib_LIBRARIES}")
-    set(TAGLIB_FOUND "${Taglib_FOUND}")
-
     if (Taglib_FOUND AND NOT TARGET Taglib::Taglib)
         add_library(Taglib::Taglib UNKNOWN IMPORTED)
         set_target_properties(Taglib::Taglib PROPERTIES
