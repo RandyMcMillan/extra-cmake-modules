@@ -29,88 +29,70 @@
 # SPDX-FileCopyrightText: 2020 Elvis Angelaccio <elvis.angelaccio@kde.org>
 # SPDX-License-Identifier: BSD-3-Clause
 
-if(NOT WIN32)
-    find_program(TaglibConfig_EXECUTABLE NAMES taglib-config)
-endif()
+find_package(PkgConfig)
+if(PkgConfig_FOUND)
+    pkg_search_module(PC_TAGLIB taglib)
 
-if(TaglibConfig_EXECUTABLE)
-    execute_process(COMMAND ${TaglibConfig_EXECUTABLE} --version
-        OUTPUT_VARIABLE TC_Taglib_VERSION
-        OUTPUT_STRIP_TRAILING_WHITESPACE
+    find_path(Taglib_INCLUDE_DIRS
+        NAMES tag.h
+        HINTS ${PC_TAGLIB_INCLUDEDIR} ${PC_TAGLIB_INCLUDE_DIRS}
     )
 
-    execute_process(COMMAND ${TaglibConfig_EXECUTABLE} --libs
-        OUTPUT_VARIABLE TC_Taglib_LIBRARIES
-        OUTPUT_STRIP_TRAILING_WHITESPACE
+    find_library(Taglib_LIBRARIES
+        NAMES tag
+        HINTS ${PC_TAGLIB_LIBDIR} ${PC_TAGLIB_LIBRARY_DIRS}
     )
 
-    execute_process(COMMAND ${TaglibConfig_EXECUTABLE} --cflags
-        OUTPUT_VARIABLE TC_Taglib_CFLAGS
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
-
-    set(Taglib_VERSION ${TC_Taglib_VERSION})
-    set(Taglib_LIBRARIES ${TC_Taglib_LIBRARIES})
-    set(Taglib_CFLAGS ${TC_Taglib_CFLAGS})
-    string(REGEX REPLACE " *-I" ";" Taglib_INCLUDE_DIRS "${Taglib_CFLAGS}")
-
-    if (Taglib_INCLUDE_DIRS AND NOT Taglib_VERSION)
-        if(EXISTS "${Taglib_INCLUDE_DIRS}/taglib.h")
-            file(READ "${Taglib_INCLUDE_DIRS}/taglib.h" TAGLIB_H)
-            string(REGEX MATCH "#define TAGLIB_MAJOR_VERSION[ ]+[0-9]+" TAGLIB_MAJOR_VERSION_MATCH ${TAGLIB_H})
-            string(REGEX MATCH "#define TAGLIB_MINOR_VERSION[ ]+[0-9]+" TAGLIB_MINOR_VERSION_MATCH ${TAGLIB_H})
-            string(REGEX MATCH "#define TAGLIB_PATCH_VERSION[ ]+[0-9]+" TAGLIB_PATCH_VERSION_MATCH ${TAGLIB_H})
-
-            string(REGEX REPLACE ".*_MAJOR_VERSION[ ]+(.*)" "\\1" TAGLIB_MAJOR_VERSION "${TAGLIB_MAJOR_VERSION_MATCH}")
-            string(REGEX REPLACE ".*_MINOR_VERSION[ ]+(.*)" "\\1" TAGLIB_MINOR_VERSION "${TAGLIB_MINOR_VERSION_MATCH}")
-            string(REGEX REPLACE ".*_PATCH_VERSION[ ]+(.*)" "\\1" TAGLIB_PATCH_VERSION "${TAGLIB_PATCH_VERSION_MATCH}")
-
-            set(Taglib_VERSION "${TAGLIB_MAJOR_VERSION}.${TAGLIB_MINOR_VERSION}.${TAGLIB_PATCH_VERSION}")
-        endif()
-    endif()
-
-    include(FindPackageHandleStandardArgs)
-    find_package_handle_standard_args(Taglib
-        FOUND_VAR
-            Taglib_FOUND
-        REQUIRED_VARS
-            Taglib_LIBRARIES
-            Taglib_INCLUDE_DIRS
-        VERSION_VAR
-            Taglib_VERSION
-    )
-
-    if (Taglib_FOUND AND NOT TARGET Taglib::Taglib)
-        add_library(Taglib::Taglib UNKNOWN IMPORTED)
-        set_target_properties(Taglib::Taglib PROPERTIES
-            IMPORTED_LOCATION "${Taglib_LIBRARIES}"
-            INTERFACE_COMPILE_OPTIONS "${Taglib_CFLAGS}"
-            INTERFACE_INCLUDE_DIRECTORIES "${Taglib_INCLUDE_DIRS}"
-        )
-    endif()
-
-    mark_as_advanced(Taglib_CFLAGS Taglib_LIBRARIES Taglib_INCLUDE_DIRS)
+    set(Taglib_VERSION ${PC_TAGLIB_VERSION})
 else()
-    find_path(TAGLIB_INCLUDES
+    find_path(Taglib_INCLUDE_DIRS
         NAMES tag.h
         PATH_SUFFIXES taglib
         PATHS ${INCLUDE_INSTALL_DIR}
     )
 
-    find_library(TAGLIB_LIBRARIES
+    find_library(Taglib_LIBRARIES
         NAMES tag
         PATHS ${LIB_INSTALL_DIR}
     )
-
-    include(FindPackageHandleStandardArgs)
-    find_package_handle_standard_args(Taglib
-        DEFAULT_MSG
-        TAGLIB_INCLUDES
-        TAGLIB_LIBRARIES
-    )
-
-    mark_as_advanced(TAGLIB_LIBRARIES TAGLIB_INCLUDES)
 endif()
+
+if (Taglib_INCLUDE_DIRS AND NOT Taglib_VERSION)
+    if(EXISTS "${Taglib_INCLUDE_DIRS}/taglib.h")
+        file(READ "${Taglib_INCLUDE_DIRS}/taglib.h" TAGLIB_H)
+
+        string(REGEX MATCH "#define TAGLIB_MAJOR_VERSION[ ]+[0-9]+" TAGLIB_MAJOR_VERSION_MATCH ${TAGLIB_H})
+        string(REGEX MATCH "#define TAGLIB_MINOR_VERSION[ ]+[0-9]+" TAGLIB_MINOR_VERSION_MATCH ${TAGLIB_H})
+        string(REGEX MATCH "#define TAGLIB_PATCH_VERSION[ ]+[0-9]+" TAGLIB_PATCH_VERSION_MATCH ${TAGLIB_H})
+
+        string(REGEX REPLACE ".*_MAJOR_VERSION[ ]+(.*)" "\\1" TAGLIB_MAJOR_VERSION "${TAGLIB_MAJOR_VERSION_MATCH}")
+        string(REGEX REPLACE ".*_MINOR_VERSION[ ]+(.*)" "\\1" TAGLIB_MINOR_VERSION "${TAGLIB_MINOR_VERSION_MATCH}")
+        string(REGEX REPLACE ".*_PATCH_VERSION[ ]+(.*)" "\\1" TAGLIB_PATCH_VERSION "${TAGLIB_PATCH_VERSION_MATCH}")
+
+        set(Taglib_VERSION "${TAGLIB_MAJOR_VERSION}.${TAGLIB_MINOR_VERSION}.${TAGLIB_PATCH_VERSION}")
+    endif()
+endif()
+
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(Taglib
+    FOUND_VAR
+        Taglib_FOUND
+    REQUIRED_VARS
+        Taglib_LIBRARIES
+        Taglib_INCLUDE_DIRS
+    VERSION_VAR
+        Taglib_VERSION
+)
+
+if (Taglib_FOUND AND NOT TARGET Taglib::Taglib)
+    add_library(Taglib::Taglib UNKNOWN IMPORTED)
+    set_target_properties(Taglib::Taglib PROPERTIES
+        IMPORTED_LOCATION "${Taglib_LIBRARIES}"
+        INTERFACE_INCLUDE_DIRECTORIES "${Taglib_INCLUDE_DIRS}"
+    )
+endif()
+
+mark_as_advanced(Taglib_LIBRARIES Taglib_INCLUDE_DIRS)
 
 include(FeatureSummary)
 set_package_properties(Taglib PROPERTIES
