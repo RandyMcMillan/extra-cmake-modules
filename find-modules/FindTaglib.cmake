@@ -29,7 +29,7 @@
 # SPDX-FileCopyrightText: 2020 Elvis Angelaccio <elvis.angelaccio@kde.org>
 # SPDX-License-Identifier: BSD-3-Clause
 
-find_package(PkgConfig)
+find_package(PkgConfig QUIET)
 
 pkg_search_module(PC_TAGLIB taglib)
 
