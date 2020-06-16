@@ -31,7 +31,7 @@
 
 find_package(PkgConfig QUIET)
 
-pkg_search_module(PC_TAGLIB taglib)
+pkg_search_module(PC_TAGLIB QUIET taglib)
 
 find_path(Taglib_INCLUDE_DIRS
     NAMES tag.h
