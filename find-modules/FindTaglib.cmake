@@ -30,32 +30,21 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 find_package(PkgConfig)
-if(PkgConfig_FOUND)
-    pkg_search_module(PC_TAGLIB taglib)
 
-    find_path(Taglib_INCLUDE_DIRS
-        NAMES tag.h
-        HINTS ${PC_TAGLIB_INCLUDEDIR} ${PC_TAGLIB_INCLUDE_DIRS}
-    )
+pkg_search_module(PC_TAGLIB taglib)
 
-    find_library(Taglib_LIBRARIES
-        NAMES tag
-        HINTS ${PC_TAGLIB_LIBDIR} ${PC_TAGLIB_LIBRARY_DIRS}
-    )
+find_path(Taglib_INCLUDE_DIRS
+    NAMES tag.h
+    PATH_SUFFIXES taglib
+    HINTS ${PC_TAGLIB_INCLUDEDIR}
+)
 
-    set(Taglib_VERSION ${PC_TAGLIB_VERSION})
-else()
-    find_path(Taglib_INCLUDE_DIRS
-        NAMES tag.h
-        PATH_SUFFIXES taglib
-        PATHS ${INCLUDE_INSTALL_DIR}
-    )
+find_library(Taglib_LIBRARIES
+    NAMES tag
+    HINTS ${PC_TAGLIB_LIBDIR}
+)
 
-    find_library(Taglib_LIBRARIES
-        NAMES tag
-        PATHS ${LIB_INSTALL_DIR}
-    )
-endif()
+set(Taglib_VERSION ${PC_TAGLIB_VERSION})
 
 if (Taglib_INCLUDE_DIRS AND NOT Taglib_VERSION)
     if(EXISTS "${Taglib_INCLUDE_DIRS}/taglib.h")
