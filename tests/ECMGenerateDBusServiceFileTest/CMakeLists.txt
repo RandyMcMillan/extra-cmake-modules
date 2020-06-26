@@ -8,15 +8,6 @@ include(ECMGenerateDBusServiceFile)
 
 # run test
 
-#set(FOO myFoo)
-#set(BAR myBar)
-
-#ecm_install_configured_files(TEMPLATES configured.txt DESTINATION ${CMAKE_INSTALL_PREFIX}/test)
-
-#ecm_install_configured_files(TEMPLATES configured_atOnly.txt.in DESTINATION ${CMAKE_INSTALL_PREFIX}/test @ONLY ESCAPE_QUOTES)
-
-#ecm_install_configured_files(TEMPLATES multi1.txt.in ${CMAKE_CURRENT_SOURCE_DIR}/multi2.txt.in DESTINATION ${CMAKE_INSTALL_PREFIX}/test)
-
 ecm_generate_dbus_service_file(
    NAME org.kde.kded5
    EXECUTABLE /usr/bin/kded5
