@@ -110,6 +110,7 @@ function(kde_package_app_templates)
         add_custom_command(OUTPUT ${_template}
              COMMAND ${CMAKE_COMMAND} -E tar "cvfj" ${_template} .
              WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}
+             DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}
         )
 
 
