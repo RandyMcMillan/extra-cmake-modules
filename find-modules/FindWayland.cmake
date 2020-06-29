@@ -32,6 +32,8 @@
 # ``Wayland_DEFINITIONS``
 #     This should be passed to target_compile_options() if the targets are not
 #     used for linking
+# ``Wayland_DATADIR``
+#     This protocol data directory
 #
 # For each searched-for components, ``Wayland_<component>_FOUND`` will be set to
 # TRUE if the corresponding Wayland library was found, and FALSE otherwise.  If
@@ -135,6 +137,8 @@ find_package_handle_standard_args(Wayland
         Wayland_VERSION
     HANDLE_COMPONENTS
 )
+
+pkg_get_variable(Wayland_DATADIR wayland-server pkgdatadir)
 
 include(FeatureSummary)
 set_package_properties(Wayland PROPERTIES
