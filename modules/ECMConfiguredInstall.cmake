@@ -9,7 +9,7 @@
 # ::
 #
 #   ecm_install_configured_files(
-#       TEMPLATES <file> [<file2> [...]]
+#       INPUT <file> [<file2> [...]]
 #       DESTINATION <INSTALL_DIRECTORY>
 #       [COPYONLY]
 #       [ESCAPE_QUOTES]
@@ -20,7 +20,7 @@
 #
 # .. code-block:: cmake
 #
-#   ecm_install_configured_files(TEMPLATES foo.txt.in DESTINATION ${KDE_INSTALL_DATADIR} @ONLY)
+#   ecm_install_configured_files(INPUT foo.txt.in DESTINATION ${KDE_INSTALL_DATADIR} @ONLY)
 #
 # This wil install the file as foo.txt with any cmake variable replacements made into the data directory.
 #
@@ -54,7 +54,7 @@
 function(ecm_install_configured_files)
     set(options COPYONLY ESCAPE_QUOTES @ONLY)
     set(oneValueArgs DESTINATION COMPONENT)
-    set(multiValueArgs TEMPLATES)
+    set(multiValueArgs INPUT)
 
     cmake_parse_arguments(ARGS "${options}" "${oneValueArgs}"
                           "${multiValueArgs}" ${ARGN})
@@ -68,9 +68,9 @@ function(ecm_install_configured_files)
         message(FATAL_ERROR "missing DESTINATION argument to ECMConfiguredInstall")
     endif()
 
-    foreach(_template ${ARGS_TEMPLATES})
+    foreach(_input ${ARGS_INPUT})
         # convert absolute paths
-        get_filename_component(_name ${_template} NAME)
+        get_filename_component(_name ${_input} NAME)
 
         string(REGEX REPLACE "\\.in$"  "" _name ${_name})
 
@@ -87,7 +87,7 @@ function(ecm_install_configured_files)
                 list(APPEND _configure_args @ONLY)
         endif()
 
-        configure_file(${_template} ${_out_file} ${_configure_args})
+        configure_file(${_input} ${_out_file} ${_configure_args})
 
         if (DEFINED ARGS_COMPONENT)
             set(_component COMPONENT ${ARGS_COMPONENT})
