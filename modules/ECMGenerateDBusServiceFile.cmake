@@ -45,7 +45,7 @@
 #       DESTINATION ${KDE_INSTALL_DBUSSERVICEDIR}
 #   )
 #
-# Since 5.71.0.
+# Since 5.73.0.
 
 #=============================================================================
 # Copyright 2020 Kai Uwe Broulik <kde@broulik.de>
