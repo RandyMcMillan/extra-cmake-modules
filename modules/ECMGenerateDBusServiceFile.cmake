@@ -23,8 +23,8 @@
 # Note: On Windows, the macro will only use the file name part of ``<executable>`` since D-Bus
 # service executables are to be installed in the same directory as the D-Bus daemon.
 #
-# Optionally, a ``<systemd service>`` can be specified to let systemd consider the corresponding
-# systemd service initialized once the D-Bus name has been acquired by the executable.
+# Optionally, a ``<systemd service>`` can be specified to launch the corresponding
+# systemd service instead of the ``<executable>`` if the dbus daemon is started by systemd.
 #
 # Example usage:
 #
