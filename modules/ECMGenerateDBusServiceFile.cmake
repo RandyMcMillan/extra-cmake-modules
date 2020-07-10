@@ -14,17 +14,17 @@
 #       DESTINATION <install_path>
 #   )
 #
-# A D-Bus service file ``<service name>.service`` will will be generated and installed
+# A D-Bus service file ``<service name>.service`` will be generated and installed
 # in the relevant D-Bus config location.
 #
 # ``<executable>`` must be an absolute path to the installed service executable. When using it with
-# ``KDEInstallDirs`` it needs to be the ``_FULL_`` variant.
+# ``KDEInstallDirs`` it needs to be the ``_FULL_`` variant of the path variable.
 #
 # Note: On Windows, the macro will only use the file name part of ``<executable>`` since D-Bus
 # service executables are to be installed in the same directory as the D-Bus daemon.
 #
 # Optionally, a ``<systemd service>`` can be specified to launch the corresponding
-# systemd service instead of the ``<executable>`` if the dbus daemon is started by systemd.
+# systemd service instead of the ``<executable>`` if the D-Bus daemon is started by systemd.
 #
 # Example usage:
 #
