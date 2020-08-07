@@ -76,12 +76,17 @@ function(UPDATE_XDG_MIMETYPES _path)
     endif()
 
     # Note that targets and most variables are not available to install code
+    set(_updateArgs "")
+    if(SharedMimeInfo_VERSION_STRING VERSION_GREATER "1.3")
+        set(_updateArgs "-n")
+    endif()
+
     install(CODE "
 set(DESTDIR_VALUE \"\$ENV{DESTDIR}\")
 if (NOT DESTDIR_VALUE)
     # under Windows relative paths are used, that's why it runs from CMAKE_INSTALL_PREFIX
     message(STATUS \"Updating MIME database at \${CMAKE_INSTALL_PREFIX}/${_xdgmimeDir}\")
-    execute_process(COMMAND \"${UPDATE_MIME_DATABASE_EXECUTABLE}\" \"${_xdgmimeDir}\"
+    execute_process(COMMAND \"${UPDATE_MIME_DATABASE_EXECUTABLE}\" ${_updateArgs} \"${_xdgmimeDir}\"
                     WORKING_DIRECTORY \"\${CMAKE_INSTALL_PREFIX}\")
 endif (NOT DESTDIR_VALUE)
 ")
