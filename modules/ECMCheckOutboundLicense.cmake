@@ -67,15 +67,15 @@
 
 option(SKIP_LICENSE_TESTS "Skip outbound license tests" OFF)
 
-find_program(RESUSE_FOUND NAMES reuse)
-if (NOT SKIP_LICENSE_TESTS AND NOT REUSE_FOUND)
+find_program(REUSE_TOOL_FOUND NAMES reuse)
+if (NOT SKIP_LICENSE_TESTS AND NOT REUSE_TOOL_FOUND)
     message(WARNING "Reuse tool not found, skipping test generation")
 endif()
 
 set(SPDX_BOM_OUTPUT "${CMAKE_BINARY_DIR}/spdx.txt")
 
 # test fixture for generating SPDX bill of materials
-if(SKIP_LICENSE_TESTS OR NOT RESUSE_FOUND)
+if(SKIP_LICENSE_TESTS OR NOT REUSE_TOOL_FOUND)
     message(STATUS "Skipping execution of outbound license tests.")
 else()
     add_test(
@@ -87,7 +87,7 @@ else()
 endif()
 
 function(ecm_check_outbound_license)
-    if(SKIP_LICENSE_TESTS OR NOT RESUSE_FOUND)
+    if(SKIP_LICENSE_TESTS OR NOT REUSE_TOOL_FOUND)
         return()
     endif()
 
