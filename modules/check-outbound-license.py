@@ -23,7 +23,8 @@ compatibilityMatrix = {
         "LGPL-2.0-or-later",
         "MIT",
         "BSD-2-Clause",
-        "BSD-3-Clause"],
+        "BSD-3-Clause",
+        "bzip2-1.0.6"],
     "LGPL-2.1-only": [
         "CC0-1.0",
         "LGPL-2.0-or-later",
@@ -31,7 +32,8 @@ compatibilityMatrix = {
         "LGPL-2.1-or-later",
         "MIT",
         "BSD-2-Clause",
-        "BSD-3-Clause"],
+        "BSD-3-Clause",
+        "bzip2-1.0.6"],
     "LGPL-3.0-only": [
         "CC0-1.0",
         "LGPL-2.0-or-later",
@@ -40,7 +42,8 @@ compatibilityMatrix = {
         "LGPL-3.0-or-later",
         "MIT",
         "BSD-2-Clause",
-        "BSD-3-Clause"],
+        "BSD-3-Clause",
+        "bzip2-1.0.6"],
     "GPL-2.0-only": [
         "CC0-1.0",
         "LGPL-2.0-only",
@@ -51,7 +54,8 @@ compatibilityMatrix = {
         "GPL-2.0-or-later",
         "MIT",
         "BSD-2-Clause",
-        "BSD-3-Clause"],
+        "BSD-3-Clause",
+        "bzip2-1.0.6"],
     "GPL-3.0-only": [
         "CC0-1.0",
         "LGPL-2.0-or-later",
@@ -63,7 +67,8 @@ compatibilityMatrix = {
         "GPL-3.0-or-later",
         "MIT",
         "BSD-2-Clause",
-        "BSD-3-Clause"]
+        "BSD-3-Clause",
+        "bzip2-1.0.6"]
 }
 
 def check_outbound_license(license, files, spdxDictionary):
