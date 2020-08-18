@@ -4,7 +4,7 @@ include(ECMCheckOutboundLicense)
 
 # check relative and absolute input paths
 ecm_check_outbound_license(
-LICENSE LGPL-2.1-only
+LICENSES LGPL-2.1-only
 TEST_NAME absolute-path-handling
 FILES
     testdata/BSD-2-Clause.cpp
@@ -13,14 +13,23 @@ FILES
 
 # check test case generation wihout TEST_NAME statement
 ecm_check_outbound_license(
-LICENSE LGPL-2.1-only
+LICENSES LGPL-2.1-only
 FILES
     testdata/BSD-2-Clause.cpp
 )
 
+# check multi license case
+ecm_check_outbound_license(
+LICENSES LGPL-2.1-only GPL-3.0-only
+TEST_NAME multiple-licenses
+FILES
+    testdata/BSD-2-Clause.cpp
+)
+
+
 # check for valid LGPL-2.1-only
 ecm_check_outbound_license(
-LICENSE LGPL-2.1-only
+LICENSES LGPL-2.1-only
 TEST_NAME valid-LGPL-2.1-only
 FILES
     testdata/BSD-2-Clause.cpp
@@ -29,7 +38,7 @@ FILES
 
 # check for valid LGPL-3.0-only
 ecm_check_outbound_license(
-LICENSE LGPL-3.0-only
+LICENSES LGPL-3.0-only
 TEST_NAME valid-LGPL-3.0-only
 FILES
     testdata/BSD-2-Clause.cpp
@@ -39,7 +48,7 @@ FILES
 
 # check for valid GPL-2.0-only
 ecm_check_outbound_license(
-LICENSE GPL-2.0-only
+LICENSES GPL-2.0-only
 TEST_NAME valid-GPL-2.0-only
 FILES
     testdata/BSD-2-Clause.cpp
@@ -49,7 +58,7 @@ FILES
 
 # check for valid GPL-3.0-only
 ecm_check_outbound_license(
-LICENSE GPL-3.0-only
+LICENSES GPL-3.0-only
 TEST_NAME valid-GPL-3.0-only
 FILES
     testdata/BSD-2-Clause.cpp
@@ -60,7 +69,7 @@ FILES
 
 # check for invalid GPL-3.0-only
 ecm_check_outbound_license(
-LICENSE LGPL-2.1-only
+LICENSES LGPL-2.1-only
 TEST_NAME invalid-LGPL-2.1-only
 FILES
     testdata/LGPL-2.0-only.cpp
@@ -70,7 +79,7 @@ WILL_FAIL
 
 # check for invalid GPL-3.0-only
 ecm_check_outbound_license(
-LICENSE GPL-3.0-only
+LICENSES GPL-3.0-only
 TEST_NAME invalid-GPL-3.0-only
 FILES
     testdata/GPL-2.0-only.cpp
