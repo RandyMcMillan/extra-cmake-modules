@@ -27,7 +27,7 @@
 #
 # ::
 #
-#   ecm_check_outbound_license(LICENSE <outbound-license>
+#   ecm_check_outbound_license(LICENSES <outbound-licenses>
 #                              FILES <source-files>
 #                              [TEST_NAME <name>]
 #                              [WILL_FAIL])
@@ -36,8 +36,8 @@
 # compatible with the specified license headers. Note that a convenient way is to use
 # the CMake GLOB command of the FILE function.
 #
-# ``LICENSE``   : The outbound license regarding which the compatibility of the source
-#                 code files shall be tested. Currently, the following LICENSE values
+# ``LICENSES``  : List of one or multiple outbound license regarding which the compatibility
+#                  of the source code files shall be tested. Currently, the following values
 #                 are supported (values are SPDX registry identifiers):
 #                    * MIT
 #                    * BSD-2-Clause
@@ -92,16 +92,17 @@ function(ecm_check_outbound_license)
     endif()
 
     set(_options WILL_FAIL)
-    set(_oneValueArgs LICENSE TEST_NAME)
-    set(_multiValueArgs FILES)
+    set(_oneValueArgs TEST_NAME)
+    set(_multiValueArgs LICENSES FILES)
     cmake_parse_arguments(ARG "${_options}" "${_oneValueArgs}" "${_multiValueArgs}" ${ARGN} )
 
-    if(NOT ARG_LICENSE)
-        message(FATAL_ERROR "No LICENSE argument given to ecm_check_outbound_license")
+    if(NOT ARG_LICENSES)
+        message(FATAL_ERROR "No LICENSES argument given to ecm_check_outbound_license")
     endif()
 
     if(NOT ARG_FILES)
-        message(FATAL_ERROR "No FILES argument given to ecm_check_outbound_license")
+        message(WARNING "No FILES argument given to ecm_check_outbound_license")
+        return()
     endif()
 
     if(NOT ARG_TEST_NAME)
@@ -127,10 +128,13 @@ function(ecm_check_outbound_license)
 
     file(COPY ${ECM_MODULE_DIR}/check-outbound-license.py DESTINATION ${CMAKE_BINARY_DIR})
 
-    add_test(
-        NAME licensecheck_${ARG_TEST_NAME}
-        COMMAND python3 ${CMAKE_BINARY_DIR}/check-outbound-license.py -l ${ARG_LICENSE} -s ${SPDX_BOM_OUTPUT} -i ${OUTPUT_FILE}
-    )
-    set_tests_properties(licensecheck_${ARG_TEST_NAME} PROPERTIES FIXTURES_REQUIRED SPDX_BOM)
-    set_tests_properties(licensecheck_${ARG_TEST_NAME} PROPERTIES WILL_FAIL ${ARG_WILL_FAIL})
+    foreach(_license ${ARG_LICENSES})
+        string(MAKE_C_IDENTIFIER ${_license} LICENSE_ID)
+        add_test(
+            NAME licensecheck_${ARG_TEST_NAME}_${LICENSE_ID}
+            COMMAND python3 ${CMAKE_BINARY_DIR}/check-outbound-license.py -l ${_license} -s ${SPDX_BOM_OUTPUT} -i ${OUTPUT_FILE}
+        )
+        set_tests_properties(licensecheck_${ARG_TEST_NAME}_${LICENSE_ID} PROPERTIES FIXTURES_REQUIRED SPDX_BOM)
+        set_tests_properties(licensecheck_${ARG_TEST_NAME}_${LICENSE_ID} PROPERTIES WILL_FAIL ${ARG_WILL_FAIL})
+    endforeach()
 endfunction()
