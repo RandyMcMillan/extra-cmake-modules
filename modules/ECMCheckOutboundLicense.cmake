@@ -80,7 +80,7 @@ if(SKIP_LICENSE_TESTS OR NOT REUSE_TOOL_FOUND)
 else()
     add_test(
         NAME generate_spdx_bom
-        COMMAND bash -c "reuse spdx > ${SPDX_BOM_OUTPUT}"
+        COMMAND reuse spdx -o ${SPDX_BOM_OUTPUT}
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     )
     set_tests_properties(generate_spdx_bom PROPERTIES FIXTURES_SETUP SPDX_BOM)
