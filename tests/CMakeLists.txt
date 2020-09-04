@@ -32,7 +32,6 @@ set_package_properties(
 )
 
 add_subdirectory(ECMAddTests)
-add_subdirectory(ECMCheckOutboundLicenseTest)
 add_subdirectory(ECMGenerateExportHeaderTest)
 add_subdirectory(ECMGenerateHeadersTest)
 add_subdirectory(ECMSetupVersionTest)
@@ -60,6 +59,11 @@ macro(add_test_macro NAME)
 endmacro()
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/find-modules)
+
+# enforce finding of ReuseTool in parent scope of module, beause
+# only here the module path can point into the source directory
+find_package(ReuseTool)
+add_subdirectory(ECMCheckOutboundLicenseTest)
 
 # Skip if PyQt not available
 find_file(SIP_Qt5Core_Mod_FILE
