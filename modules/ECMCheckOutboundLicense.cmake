@@ -67,9 +67,13 @@
 
 option(SKIP_LICENSE_TESTS "Skip outbound license tests" OFF)
 
+find_package(Python3 REQUIRED)
 find_program(REUSE_TOOL_FOUND NAMES reuse)
 if (NOT SKIP_LICENSE_TESTS AND NOT REUSE_TOOL_FOUND)
+    add_feature_info(SPDX_LICENSE_TESTING FALSE "Automatic license testing based on SPDX definitions (requires reuse tool)")
     message(WARNING "Reuse tool not found, skipping test generation")
+else()
+    add_feature_info(SPDX_LICENSE_TESTING TRUE "Automatic license testing based on SPDX definitions (requires reuse tool)")
 endif()
 
 set(SPDX_BOM_OUTPUT "${CMAKE_BINARY_DIR}/spdx.txt")
