@@ -59,7 +59,7 @@
 # ``WILL_FAIL`` : Optional parameter that inverts the test result. This parameter is usually only
 #                 used for tests of the module.
 #
-# Since 5.74.0
+# Since 5.75.0
 
 #=============================================================================
 # SPDX-FileCopyrightText: 2020 Andreas Cord-Landwehr <cordlandwehr@kde.org>
