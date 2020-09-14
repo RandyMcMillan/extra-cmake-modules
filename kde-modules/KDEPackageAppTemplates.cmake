@@ -88,9 +88,7 @@ function(kde_package_app_templates)
         get_filename_component(_baseName ${_tmp_file} NAME_WE)
         set(_template ${CMAKE_CURRENT_BINARY_DIR}/${_baseName}.tar.bz2)
 
-        # We want to go 5 dirs recrusive, this should catch all changes
-        file(GLOB_RECURSE _files CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}/*****")
-
+        file(GLOB_RECURSE _files CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}/*")
         add_custom_target(${_baseName} ALL DEPENDS ${_template})
         add_custom_command(OUTPUT ${_template}
              COMMAND ${CMAKE_COMMAND} -E tar "cvfj" ${_template} .
