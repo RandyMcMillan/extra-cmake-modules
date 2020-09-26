@@ -68,15 +68,19 @@
 option(SKIP_LICENSE_TESTS "Skip outbound license tests" OFF)
 
 find_package(Python3)
-set_package_properties(Python3 PROPERTIES
-    PURPOSE "Required to run tests of module ECMCheckOutboundLicense"
-    TYPE OPTIONAL
-)
+if(COMMAND set_package_properties)
+    set_package_properties(Python3 PROPERTIES
+        PURPOSE "Required to run tests of module ECMCheckOutboundLicense"
+        TYPE OPTIONAL
+    )
+endif()
 find_package(ReuseTool)
-set_package_properties(ReuseTool PROPERTIES
-    PURPOSE "Required to run tests of module ECMCheckOutboundLicense"
-    TYPE OPTIONAL
-)
+if(COMMAND set_package_properties)
+    set_package_properties(ReuseTool PROPERTIES
+        PURPOSE "Required to run tests of module ECMCheckOutboundLicense"
+        TYPE OPTIONAL
+    )
+endif()
 
 if (NOT SKIP_LICENSE_TESTS AND NOT REUSETOOL_FOUND)
     add_feature_info(SPDX_LICENSE_TESTING FALSE "Automatic license testing based on SPDX definitions (requires reuse tool)")
