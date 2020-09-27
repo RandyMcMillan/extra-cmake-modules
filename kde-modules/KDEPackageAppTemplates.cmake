@@ -108,7 +108,9 @@ function(kde_package_app_templates)
         add_custom_target(${_baseName} ALL DEPENDS ${_template})
 
         add_custom_command(OUTPUT ${_template}
-             COMMAND ${CMAKE_COMMAND} -E tar "cvfj" ${_template} .
+             COMMAND tar ARGS -c ${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}
+                --exclude .kdev_ignore --exclude .svn --sort=name --mode=go=rX,u+rw,a-s --owner=root
+                --group=root --numeric-owner -j -v -f ${_template} .
              WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}
         )
 
