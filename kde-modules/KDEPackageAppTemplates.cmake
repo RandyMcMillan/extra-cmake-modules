@@ -88,7 +88,9 @@ function(kde_package_app_templates)
         get_filename_component(_baseName ${_tmp_file} NAME_WE)
         set(_template ${CMAKE_CURRENT_BINARY_DIR}/${_baseName}.tar.bz2)
 
-        file(GLOB_RECURSE _files CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}/*")
+        if((${CMAKE_VERSION} GREATER_EQUAL "3.12.0") OR (${CMAKE_VERSION} VERSION_EQUAL "3.12.0"))
+            file(GLOB_RECURSE _files CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}/*")
+        endif()
         add_custom_target(${_baseName} ALL DEPENDS ${_template})
         add_custom_command(OUTPUT ${_template}
              COMMAND ${CMAKE_COMMAND} -E tar "cvfj" ${_template} .
