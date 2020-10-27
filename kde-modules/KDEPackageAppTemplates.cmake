@@ -88,7 +88,7 @@ function(kde_package_app_templates)
         get_filename_component(_baseName ${_tmp_file} NAME_WE)
         set(_template ${CMAKE_CURRENT_BINARY_DIR}/${_baseName}.tar.bz2)
 
-        if((${CMAKE_VERSION} GREATER_EQUAL "3.12.0") OR (${CMAKE_VERSION} VERSION_EQUAL "3.12.0"))
+        if((CMAKE_MAJOR_VERSION GREATER_EQUAL 3) AND (CMAKE_MINOR_VERSION GREATER_EQUAL 12))
             file(GLOB_RECURSE _files CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}/*")
         endif()
         add_custom_target(${_baseName} ALL DEPENDS ${_template})
