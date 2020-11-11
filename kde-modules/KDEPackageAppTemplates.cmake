@@ -91,6 +91,8 @@ function(kde_package_app_templates)
         if((CMAKE_MAJOR_VERSION GREATER 3) OR
             (CMAKE_MAJOR_VERSION EQUAL 3 AND CMAKE_MINOR_VERSION GREATER 11))
             file(GLOB_RECURSE _files CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}/*")
+        else()
+            message(WARNING "The cmake version is smaller than 3.12, you have to manually delete the created archive to rebuild it")
         endif()
         add_custom_target(${_baseName} ALL DEPENDS ${_template})
         add_custom_command(OUTPUT ${_template}
