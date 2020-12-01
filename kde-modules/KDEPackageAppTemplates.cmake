@@ -85,12 +85,19 @@ function(kde_package_app_templates)
     
     find_program(_tar_executable NAMES gtar tar)
     if(_tar_executable)
-        exec_program(${_tar_executable} ARGS --version OUTPUT_VARIABLE _tar_version RETURN_VALUE _tar_exit)
+        execute_process(
+            COMMAND ${_tar_executable} --version 
+            TIMEOUT 3
+            RESULT_VARIABLE _tar_exit
+            OUTPUT_VARIABLE _tar_version 
+        )
         if(_tar_exit EQUAL 0 and _tar_version MATCHES "GNU tar")
             set(GNU_TAR_FOUND ON)
         else()
             set(GNU_TAR_FOUND OFF)
         endif()
+    else()
+        set(GNU_TAR_FOUND OFF)
     endif()
 
     foreach(_templateName ${ARG_TEMPLATES})
