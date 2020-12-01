@@ -108,7 +108,7 @@ function(kde_package_app_templates)
         add_custom_target(${_baseName} ALL DEPENDS ${_template})
 
         if(GNU_TAR_FOUND)
-            # Make tar archive reproducible, the arguments are only available on UNIX like systems
+            # Make tar archive reproducible, the arguments are only available with GNU tar
             add_custom_command(OUTPUT ${_template}
                  COMMAND tar ARGS -c ${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}
                     --exclude .kdev_ignore --exclude .svn --sort=name --mode=go=rX,u+rw,a-s --owner=root
