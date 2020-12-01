@@ -91,7 +91,7 @@ function(kde_package_app_templates)
             RESULT_VARIABLE _tar_exit
             OUTPUT_VARIABLE _tar_version 
         )
-        if(_tar_exit EQUAL 0 and _tar_version MATCHES "GNU tar")
+        if("${_tar_exit}" EQUAL 0 AND "${_tar_version}" MATCHES "GNU tar")
             set(GNU_TAR_FOUND ON)
         else()
             set(GNU_TAR_FOUND OFF)
