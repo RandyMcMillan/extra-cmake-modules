@@ -98,6 +98,9 @@ install(FILES ${installTestModuleFiles} DESTINATION ${SHARE_INSTALL_DIR}/ECM/tes
 
 file(GLOB installKdeModuleFiles ${CMAKE_SOURCE_DIR}/kde-modules/*[^~])
 install(FILES ${installKdeModuleFiles} DESTINATION ${KDE_MODULES_INSTALL_DIR})
+# This needs to be an executable
+install(FILES ${CMAKE_SOURCE_DIR}/kde-modules/pre-commit.sh.cmake DESTINATION ${KDE_MODULES_INSTALL_DIR}
+        PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ)
 
 file(GLOB installFindModuleFiles ${CMAKE_SOURCE_DIR}/find-modules/*.cmake ${CMAKE_SOURCE_DIR}/find-modules/*.py)
 install(FILES ${installFindModuleFiles} DESTINATION ${FIND_MODULES_INSTALL_DIR})
