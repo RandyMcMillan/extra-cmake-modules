@@ -38,6 +38,8 @@ if(KDE_CLANG_FORMAT_EXECUTABLE)
     configure_file(${CMAKE_CURRENT_LIST_DIR}/clang-format.cmake ${CMAKE_CURRENT_SOURCE_DIR}/.clang-format @ONLY)
 endif()
 
+set(PRE_COMMIT_HOOK_UNIX ${CMAKE_CURRENT_LIST_DIR}/pre-commit.sh.cmake)
+
 # formatting target
 function(KDE_CLANG_FORMAT)
     # add target only if clang-format available
@@ -59,5 +61,14 @@ function(KDE_CLANG_FORMAT)
             ${CMAKE_COMMAND} -E echo
             "Could not set up the clang-format target as the clang-format executable is missing."
         )
+    endif()
+endfunction()
+
+function(KDE_ENABLE_CLANG_FORMAT_PRE_COMMIT_HOOK)
+    if (EXISTS "${CMAKE_SOURCE_DIR}/.git")
+        # The pre-commit hook is a bash script, consequently it won't work on non-unix platforms
+        if (UNIX)
+            configure_file(${PRE_COMMIT_HOOK_UNIX} "${CMAKE_SOURCE_DIR}/.git/hooks/pre-commit" COPYONLY)
+        endif()
     endif()
 endfunction()
