@@ -71,3 +71,7 @@ ForEachMacros: [ foreach, Q_FOREACH, BOOST_FOREACH, forever, Q_FOREVER, QBENCHMA
 
 # keep lambda formatting multi-line if not empty
 AllowShortLambdasOnASingleLine: Empty
+
+# In case we call a method with a lot parameters we do not want to have the full
+# parameter list on the next line
+PenaltyBreakBeforeFirstCallParameter: 100
