@@ -1,5 +1,5 @@
 #.rst:
-# KDECommitKooks
+# KDEGitCommitHooks
 # --------------------
 #
 # This module provides a functionality to enforce formatting
@@ -19,10 +19,10 @@
 #
 # .. code-block:: cmake
 #
-#   include(KDECommitHooks)
-#   kde_configure_pre_commit_hook(CHECKS CLANG_FORMAT)
+#   include(KDEGitCommitHooks)
+#   kde_configure_git_pre_commit_hook(CHECKS CLANG_FORMAT)
 #
-# Since 5.78
+# Since 5.79
 
 #=============================================================================
 # SPDX-FileCopyrightText: 2020 Alexander Lohnau <alexander.lohnau@gmx.de>
@@ -32,10 +32,10 @@
 # try to find clang-format in path
 find_program(KDE_CLANG_FORMAT_EXECUTABLE clang-format)
 include(CMakeParseArguments)
-set(PRE_COMMIT_HOOK_UNIX "${CMAKE_CURRENT_LIST_DIR}/kde-commit-hooks/pre-commit.cmake")
-set(CLANG_FORMAT_UNIX "${CMAKE_CURRENT_LIST_DIR}/kde-commit-hooks/clang-format.sh.cmake")
+set(PRE_COMMIT_HOOK_UNIX "${CMAKE_CURRENT_LIST_DIR}/kde-git-commit-hooks/pre-commit.cmake")
+set(CLANG_FORMAT_UNIX "${CMAKE_CURRENT_LIST_DIR}/kde-git-commit-hooks/clang-format.sh.cmake")
 
-function(KDE_CONFIGURE_PRE_COMMIT_HOOK)
+function(KDE_CONFIGURE_GIT_PRE_COMMIT_HOOK)
     set(_oneValueArgs GIT_DIR)
     set(_multiValueArgs CHECKS)
     cmake_parse_arguments(ARG "" "${_oneValueArgs}" "${_multiValueArgs}" ${ARGN} )

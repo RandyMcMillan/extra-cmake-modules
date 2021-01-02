@@ -99,8 +99,8 @@ install(FILES ${installTestModuleFiles} DESTINATION ${SHARE_INSTALL_DIR}/ECM/tes
 file(GLOB installKdeModuleFiles LIST_DIRECTORIES FALSE ${CMAKE_SOURCE_DIR}/kde-modules/*[^~])
 install(FILES ${installKdeModuleFiles} DESTINATION ${KDE_MODULES_INSTALL_DIR})
 # The scripts need to be executable
-file(GLOB installKDECommitHooks ${CMAKE_SOURCE_DIR}/kde-modules/kde-commit-hooks/*[^~])
-install(FILES ${installKDECommitHooks} DESTINATION ${KDE_MODULES_INSTALL_DIR}/kde-commit-hooks
+file(GLOB installKDECommitHooks ${CMAKE_SOURCE_DIR}/kde-modules/kde-git-commit-hooks/*[^~])
+install(FILES ${installKDECommitHooks} DESTINATION ${KDE_MODULES_INSTALL_DIR}/kde-git-commit-hooks
         PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ)
 
 file(GLOB installFindModuleFiles ${CMAKE_SOURCE_DIR}/find-modules/*.cmake ${CMAKE_SOURCE_DIR}/find-modules/*.py)
