@@ -30,7 +30,7 @@ BreakBeforeBraces: Linux
 PointerAlignment: Right
 
 # horizontally aligns arguments after an open bracket.
-AlignAfterOpenBracket: Align
+AlignAfterOpenBracket: DontAlign
 
 # don't move all parameters to new line
 AllowAllParametersOfDeclarationOnNextLine: false
@@ -71,3 +71,6 @@ ForEachMacros: [ foreach, Q_FOREACH, BOOST_FOREACH, forever, Q_FOREVER, QBENCHMA
 
 # keep lambda formatting multi-line if not empty
 AllowShortLambdasOnASingleLine: Empty
+
+# We do not want clang-format to put all arguments on a new line
+AllowAllArgumentsOnNextLine: false
