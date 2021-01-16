@@ -26,6 +26,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 include(KDECompilerSettings NO_POLICY_SCOPE)
+include(KDEClangFormat)
 
 add_definitions(-DQT_NO_CAST_TO_ASCII
                 -DQT_NO_CAST_FROM_ASCII
@@ -64,3 +65,7 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wzero-as-null-pointer-constant" )
    endif()
 endif()
+
+# add clang-format target
+file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES *.cpp *.h)
+kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})
