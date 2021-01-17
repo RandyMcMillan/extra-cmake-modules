@@ -18,6 +18,13 @@
 # In case the source dir does not contain the .git folder, the GIT_DIR
 # parameter can be passed in.
 #
+# Checks:
+#
+# - ``CLANG_FORMAT`` With this check enabled the `git clang-format` tool will be used to make sure that
+#   the changed parts are properly formatted. In case the files are not properly formatted an error
+#   message with the command to preview the formatting changes and to format the files in place
+#   will be displayed.
+#
 # Example usage:
 #
 # .. code-block:: cmake
