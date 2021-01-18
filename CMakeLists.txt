@@ -101,7 +101,7 @@ install(FILES ${installKdeModuleFiles} DESTINATION ${KDE_MODULES_INSTALL_DIR})
 # The scripts need to be executable
 file(GLOB installKDECommitHooks ${CMAKE_SOURCE_DIR}/kde-modules/kde-git-commit-hooks/*[^~])
 install(FILES ${installKDECommitHooks} DESTINATION ${KDE_MODULES_INSTALL_DIR}/kde-git-commit-hooks
-        PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ)
+        PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 file(GLOB installFindModuleFiles ${CMAKE_SOURCE_DIR}/find-modules/*.cmake ${CMAKE_SOURCE_DIR}/find-modules/*.py)
 install(FILES ${installFindModuleFiles} DESTINATION ${FIND_MODULES_INSTALL_DIR})
