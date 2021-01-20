@@ -14,14 +14,28 @@
 #
 # Using this function will create a clang-format target that will format all
 # ``<files>`` passed to the function with the predefined KDE clang-format style.
+# To format the files you have to invoke the target with ``make clang-format`` or ``ninja clang-format``.
+# Once the project is formatted it is recommended to enforce the formatting using a pre-commit hook,
+# this can be done using :kde-module:`KDEGitCommitHooks`.
+#
+# The ``.clang-fomat`` file from ECM will be copied to the source directory. This file should not be
+# added to version control. It is recommended to add it to the ``.gitignore`` file: ``/.clang-format``.
 #
 # Example usage:
 #
 # .. code-block:: cmake
 #
 #   include(KDEClangFormat)
-#   file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES src/*.cpp src/*.h)
+#   file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES *.cpp *.h)
 #   kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})
+#
+# To exclude folders from the formatting add a ``.clang-format``
+# file in the directory with the following contents:
+#
+# .. code-block:: ini
+#
+#    DisableFormat: true
+#    SortIncludes: false
 #
 # Since 5.64
 
