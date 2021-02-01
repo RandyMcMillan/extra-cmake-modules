@@ -86,7 +86,7 @@ function(kde_package_app_templates)
     find_program(_tar_executable NAMES gtar tar)
     if(_tar_executable)
         execute_process(
-            COMMAND ${_tar_executable} --version
+            COMMAND ${_tar_executable} --sort=name --version
             TIMEOUT 3
             RESULT_VARIABLE _tar_exit
             OUTPUT_VARIABLE _tar_version
