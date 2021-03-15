@@ -15,8 +15,14 @@ then
     echo "The \"git clang-format --diff\" output is:"
     git clang-format --diff
     echo ""
-    echo "Run the following coommand to apply the change:"
-    echo "       git clang-format --force # format the changed parts"
+    read -p "Do you want to apply the formatting? y/n " yn < /dev/tty
+    while true; do
+        case $yn in
+            [Yy]* ) git clang-format -f; exit 0; break;;
+            [Nn]* ) echo "Aborting due to unformatted files"; exit 1;;
+            * ) echo "Please answer y or n.";;
+        esac
+    done
 else
   echo "ERROR: You have unformatted changes, please format your files. You can do this using the following commands:"
   echo "       git clang-format --force # format the changed parts"
