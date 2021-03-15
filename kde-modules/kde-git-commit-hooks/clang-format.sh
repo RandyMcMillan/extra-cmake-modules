@@ -7,13 +7,19 @@ readonly output=$(git clang-format -v --diff)
 if [[ "$output" == *"no modified files to format"* ]]; then exit 0; fi
 if [[ "$output" == *"clang-format did not modify any files"* ]]; then exit 0; fi
 
-echo "ERROR: You have unformatted changes, please format your files. You can do this using the following commands:"
-echo "       git clang-format --force # format the changed parts"
-echo "       git clang-format --diff # preview the changes done by the formatter"
-
-# Output the diff to make it easy to review
-if [ ${#output} -lt 1000 ]
+# Output the diff if we are already in a known shell
+readonly parentProcessName=$(cat "/proc/$(ps -o ppid= $(ps -o ppid= $PPID)| sed 's/ //g')/comm")
+if [ "$parentProcessName" == 'bash' ] || [ "$parentProcessName" == 'fish' ] || [ "$parentProcessName" == 'zsh' ]
 then
+    echo ""
+    echo "The \"git clang-format --diff\" output is:"
     git clang-format --diff
+    echo ""
+    echo "Run the following coommand to apply the change:"
+    echo "       git clang-format --force # format the changed parts"
+else
+  echo "ERROR: You have unformatted changes, please format your files. You can do this using the following commands:"
+  echo "       git clang-format --force # format the changed parts"
+  echo "       git clang-format --diff # preview the changes done by the formatter"
 fi
 exit 1
