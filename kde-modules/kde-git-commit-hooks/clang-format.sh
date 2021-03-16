@@ -7,9 +7,8 @@ readonly output=$(git clang-format -v --diff)
 if [[ "$output" == *"no modified files to format"* ]]; then exit 0; fi
 if [[ "$output" == *"clang-format did not modify any files"* ]]; then exit 0; fi
 
-# Output the diff if we are already in a known shell
-readonly parentProcessName=$(cat "/proc/$(ps -o ppid= $(ps -o ppid= $PPID)| sed 's/ //g')/comm")
-if [ "$parentProcessName" == 'bash' ] || [ "$parentProcessName" == 'fish' ] || [ "$parentProcessName" == 'zsh' ]
+# Output the diff if we are already in a shell
+if [ -t 1 ]
 then
     echo ""
     echo "The \"git clang-format --diff\" output is:"
