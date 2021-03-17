@@ -7,6 +7,12 @@ readonly output=$(git clang-format -v --diff)
 if [[ "$output" == *"no modified files to format"* ]]; then exit 0; fi
 if [[ "$output" == *"clang-format did not modify any files"* ]]; then exit 0; fi
 
+display_usage_help () {
+    echo "ERROR: You have unformatted changes, please format your files. You can do this using the following commands:"
+    echo "       git clang-format --force # format the changed parts"
+    echo "       git clang-format --diff # preview the changes done by the formatter"
+}
+
 # Output the diff if we are already in a shell
 if [ -t 1 ]
 then
@@ -14,17 +20,17 @@ then
     echo "The \"git clang-format --diff\" output is:"
     git clang-format --diff
     echo ""
-    read -p "Do you want to apply the formatting? y/n " yn < /dev/tty
+    echo "Do you want to a) apply the formatting and add all tracked files, y) format the files and exit and n) to abort a/y/n"
+    read -p "" response < /dev/tty
     while true; do
-        case $yn in
-            [Yy]* ) git clang-format -f; exit 0; break;;
-            [Nn]* ) echo "Aborting due to unformatted files"; exit 1;;
-            * ) echo "Please answer y or n.";;
+        case $response in
+            [Aa]* ) git clang-format -f; git add -A; exit 0; break;;
+            [Yy]* ) git clang-format -f; exit 1; break;;
+            [Nn]* ) display_usage_help; exit 1;;
+            * ) echo "Please answer a or y or n";;
         esac
     done
 else
-  echo "ERROR: You have unformatted changes, please format your files. You can do this using the following commands:"
-  echo "       git clang-format --force # format the changed parts"
-  echo "       git clang-format --diff # preview the changes done by the formatter"
+    display_usage_help
 fi
 exit 1
