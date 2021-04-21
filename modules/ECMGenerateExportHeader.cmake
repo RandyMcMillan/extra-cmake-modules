@@ -107,6 +107,26 @@
 #   API into the compiler warning conditions of already released versions.
 #   Since 5.71.
 #
+# ``<prefix_name><uppercase_base_name>_ENUMERATOR_DEPRECATED_VERSION(major, minor, text)``
+#   to use to conditionally set a
+#   ``<prefix_name><uppercase_base_name>_DEPRECATED`` macro for an enumerator, depending
+#   on the warnings macro flags set (see below). In builds using C++11 standard or earlier,
+#   where enumerator attributes are not yet supported, the macro will always yield an empty string.
+#   With MSVC also always an empty string for now.
+#   Since 5.82.
+#
+# ``<prefix_name><uppercase_base_name>_ENUMERATOR_DEPRECATED_VERSION_BELATED(major, minor, textmajor, textminor, text)``
+#   to use to conditionally set a
+#   ``<prefix_name><uppercase_base_name>_DEPRECATED`` macro for an enumerator, depending
+#   on the warnings macro flags set (see below), with ``major`` & ``minor``
+#   applied for the logic and ``textmajor`` & ``textminor`` for the warnings message.
+#   In builds using C++11 standard or earlier, where enumerator attributes are not yet supported,
+#   the macro will always yield an empty string.
+#   With MSVC also always an empty string for now.
+#   Useful for retroactive tagging of API for the compiler without injecting the
+#   API into the compiler warning conditions of already released versions.
+#   Since 5.82.
+#
 # ``<prefix_name><uppercase_base_name>_ENABLE_DEPRECATED_SINCE(major, minor)``
 #   evaluates to ``TRUE`` or ``FALSE`` depending on the visibility macro flags
 #   set (see below). To be used mainly with ``#if``/``#endif`` to mark sections
@@ -250,7 +270,8 @@
 #   enum Bars {
 #       One,
 #   #if FOO_BUILD_DEPRECATED_SINCE(5, 0)
-#       Two,
+#       Two
+#       FOO_ENUMERATOR_DEPRECATED_VERSION(5, 0, "Use Three"), // macro available since 5.82
 #   #endif
 #       Three,
 #   };
@@ -689,6 +710,31 @@ function(ecm_generate_export_header target)
 "#define ${_macro_base_name}_DEPRECATED_VERSION_BELATED(major, minor, textmajor, textminor, text) ${_macro_base_name}_DEPRECATED_VERSION_##major(minor, \"Since \"#textmajor\".\"#textminor\". \" text)
 "
         )
+        # reusing the existing version-controlled deprecation macros for enumerator deprecation macros
+        # to avoid having to repeat all the explicit version variants
+        # MSVC seems to have issues with __declspec(deprecated) being used as enumerator attribute
+        # so while we cannot rely on minimum C++14 support and the use of [[deprecated(text)]]
+        # just skip it there as already the case for any consumers using < C++14, to avoid
+        # complicating this code
+        if(NOT MSVC)
+            string(APPEND _output
+"#if defined(__cpp_enumerator_attributes) && __cpp_enumerator_attributes >= 201411
+#  define ${_macro_base_name}_ENUMERATOR_DEPRECATED_VERSION(major, minor, text) ${_macro_base_name}_DEPRECATED_VERSION(major, minor, text)
+#  define ${_macro_base_name}_ENUMERATOR_DEPRECATED_VERSION_BELATED(major, minor, textmajor, textminor, text) ${_macro_base_name}_DEPRECATED_VERSION_BELATED(major, minor, textmajor, textminor, text)
+#else
+#  define ${_macro_base_name}_ENUMERATOR_DEPRECATED_VERSION(major, minor, text)
+#  define ${_macro_base_name}_ENUMERATOR_DEPRECATED_VERSION_BELATED(major, minor, textmajor, textminor, text)
+#endif
+"
+            )
+        else()
+            string(APPEND _output
+"// Not yet implemented for MSVC
+#define ${_macro_base_name}_ENUMERATOR_DEPRECATED_VERSION(major, minor, text)
+#define ${_macro_base_name}_ENUMERATOR_DEPRECATED_VERSION_BELATED(major, minor, textmajor, textminor, text)
+"
+            )
+        endif()
     endif()
     if (ARGS_CUSTOM_CONTENT_FROM_VARIABLE)
         string(APPEND _output "${ARGS_CUSTOM_CONTENT_FROM_VARIABLE}\n")
