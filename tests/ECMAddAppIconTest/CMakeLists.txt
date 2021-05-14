@@ -14,7 +14,7 @@ elseif(APPLE)
     set(icon_extension_to_test "icns")
 endif()
 
-#### Test 1: ecm_add_app_icon with only regular icons and no OUTFILE_BASENAME ####
+#### Test 1: ecm_add_app_icon with only regular icons and no OUTFILE_BASENAME, for sources var ####
 set(ICONS_1 16-category-name.png 128-category-name.png)
 ecm_add_app_icon(OUT_1 ICONS ${ICONS_1})
 
@@ -33,7 +33,7 @@ endif()
 add_custom_target(t_1 ALL DEPENDS ${OUT_1})
 list(APPEND OUT "${OUT_1}")
 
-#### Test 2: ecm_add_app_icon with regular and sidebar icons and OUTFILE_BASENAME set ####
+#### Test 2: ecm_add_app_icon with regular and sidebar icons and OUTFILE_BASENAME set, for sources var ####
 set(ICONS_2 16-category-name.png 128-category-name.png)
 set(SIDEBAR_ICONS_2 16-category-name-sidebar.png 128-category-name-sidebar.png)
 
@@ -59,6 +59,61 @@ endif()
 
 add_custom_target(t_2 ALL DEPENDS ${OUT_2})
 list(APPEND OUT "${OUT_2}")
+
+#### Test 3: ecm_add_app_icon with only regular icons and no OUTFILE_BASENAME, for target  ####
+set(ICONS_3 16-category-name.png 128-category-name.png)
+# only create executable target when used, otherwise cmake will complain about no sources for target
+if(WIN32 OR APPLE)
+    add_executable(app_3)
+endif()
+
+ecm_add_app_icon(app_3 ICONS ${ICONS_1})
+
+if(WIN32 OR APPLE)
+    get_target_property(OUT_3 app_3 SOURCES)
+    list(LENGTH OUT_3 out_count)
+    if(out_count EQUAL 0)
+        message(FATAL_ERROR "ecm_add_app_icon() hasn't produced anything")
+    endif()
+
+
+    if(NOT OUT_3 MATCHES "app_3.${icon_extension_to_test}")
+        message(FATAL_ERROR "ecm_add_app_icon() did not fall back to target name for icon name: ${OUT_1}")
+    endif()
+endif()
+
+list(APPEND OUT "${OUT_3}")
+
+#### Test 4: ecm_add_app_icon with regular and sidebar icons and OUTFILE_BASENAME set, for target ####
+set(ICONS_4 16-category-name.png 128-category-name.png)
+set(SIDEBAR_ICONS_4 16-category-name-sidebar.png 128-category-name-sidebar.png)
+# only create executable target when used, otherwise cmake will complain about no sources for target
+if(WIN32 OR APPLE)
+    add_executable(app_4)
+endif()
+
+ecm_add_app_icon(app_4 ICONS ${ICONS_4} SIDEBAR_ICONS ${SIDEBAR_ICONS_4} OUTFILE_BASENAME "SuperBasename4")
+
+if(WIN32 OR APPLE)
+    get_target_property(OUT_4 app_4 SOURCES)
+    list(LENGTH OUT_4 out_count)
+    if(out_count EQUAL 0)
+        message(FATAL_ERROR "ecm_add_app_icon() hasn't produced anything")
+    endif()
+
+    if(NOT OUT_4 MATCHES "SuperBasename4.${icon_extension_to_test}")
+        message(FATAL_ERROR "ecm_add_app_icon() did not respect OUTFILE_BASENAME: ${OUT_4}")
+    endif()
+endif()
+
+if(APPLE)
+    list(APPEND expected_icons "icon_16x16.png" "icon_128x128.png" "sidebar_16x16.png" "sidebar_32x32.png")
+    foreach(expected_icon ${expected_icons})
+        list(APPEND OUT_4 "${CMAKE_CURRENT_BINARY_DIR}/SuperBasename4.iconset/${expected_icon}")
+    endforeach()
+endif()
+
+list(APPEND OUT "${OUT_4}")
 
 #### this will be run by CTest ####
 configure_file(check_files.cmake.in "${CMAKE_CURRENT_BINARY_DIR}/check_files.cmake" @ONLY)
