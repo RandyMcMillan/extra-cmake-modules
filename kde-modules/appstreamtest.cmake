@@ -13,7 +13,9 @@ foreach(file IN LISTS out)
         continue()
     endif()
 
-    list(APPEND metadatafiles ${file})
+    if(EXISTS ${file})
+        list(APPEND metadatafiles ${file})
+    endif()
 endforeach()
 
 if(metadatafiles)
