@@ -12,6 +12,9 @@
 KDEInstallDirs6
 ---------------
 
+THIS IS CURRENTLY ONLY AN ALPHA VERSION, FOR FRAMEWORKS USAGE ONLY,
+AND TO BE MODIFIED INCREMENTALLY. PLEASE DO NOT USE IN APPLICATIONS YET.
+
 Define KDE standard installation directories for Qt6/KF6 based software.
 
 Note that none of the variables defined by this module provide any
@@ -208,13 +211,12 @@ be used on the command line when possible (eg: use
 ``-DKDE_INSTALL_LIBDIR=lib64`` instead of
 ``-DKDE_INSTALL_LIBDIR=/usr/lib/lib64`` to override the library directory).
 
-Since 5.82.0.
-
 The ``KDE_INSTALL_PREFIX_SCRIPT`` option will install a ${CMAKE_INSTALL_PREFIX}/prefix.sh
 file that allows to easily incorporate the necessary environment variables
 for the prefix into a process.
 #]=======================================================================]
 
+set(KDE_INSTALL_DIRS_NO_DEPRECATED TRUE)
 
 include(${CMAKE_CURRENT_LIST_DIR}/KDEInstallDirsCommon.cmake)
 
@@ -295,15 +297,22 @@ _define_non_cache(DATADIR_KF5 "${CMAKE_INSTALL_DATADIR}/kf6")
 
 
 # KDE Framework-specific things
+# TODO REMOVE THE '6'
 _define_relative(KSERVICES6DIR DATAROOTDIR "kservices6"
     "services for KDE Frameworks 6"
     SERVICES_INSTALL_DIR)
+
+# TODO REMOVE THE '6'
 _define_relative(KSERVICETYPES6DIR DATAROOTDIR "kservicetypes6"
     "service types for KDE Frameworks 6"
     SERVICETYPES_INSTALL_DIR)
+
+# TODO REMOVE THE '6'
 _define_relative(KNOTIFY6RCDIR DATAROOTDIR "knotifications6"
     "knotify description files"
     KNOTIFYRC_INSTALL_DIR)
+
+# TODO REMOVE THE '6' AND MOVE TO KXMLGUI
 _define_relative(KXMLGUI6DIR DATAROOTDIR "kxmlgui6"
     "kxmlgui .rc files"
     KXMLGUI_INSTALL_DIR)
@@ -321,6 +330,7 @@ _define_relative(LOGGINGCATEGORIESDIR DATAROOTDIR "qlogging-categories6"
 #   -everything except the development files: cmake -DCOMPONENT=Unspecified -P cmake_install.cmake
 # This can then also be used for packaging with cpack.
 # FIXME: why is INCLUDES (only) set for ARCHIVE targets?
+# TODO REMOVE THE '6'
 set(KF6_INSTALL_TARGETS_DEFAULT_ARGS  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
                                       LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
                                       ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT Devel
