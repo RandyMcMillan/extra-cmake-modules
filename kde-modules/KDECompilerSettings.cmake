@@ -185,12 +185,16 @@ endif()
 # Pick sensible versions of the C and C++ standards.
 if (NOT CMAKE_C_STANDARD)
     set(CMAKE_C_STANDARD 90)
-    set(CMAKE_C_EXTENSIONS OFF)
+    if (ECM_GLOBAL_FIND_VERSION VERSION_GREATER_EQUAL 5.84.0)
+        set(CMAKE_C_EXTENSIONS OFF)
+    endif()
 endif()
 if (NOT CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_STANDARD 11)
     set(CMAKE_CXX_STANDARD_REQUIRED True)
-    set(CMAKE_CXX_EXTENSIONS OFF)
+    if (ECM_GLOBAL_FIND_VERSION VERSION_GREATER_EQUAL 5.84.0)
+        set(CMAKE_CXX_EXTENSIONS OFF)
+    endif()
 endif()
 
 # Do not merge uninitialized global variables.
