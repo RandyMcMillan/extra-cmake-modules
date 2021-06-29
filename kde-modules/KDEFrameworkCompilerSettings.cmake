@@ -37,6 +37,7 @@ if (NOT CMAKE_CXX_STANDARD)
     endif()
 endif()
 
+set(ENABLE_BSYMBOLICFUNCTIONS ON)
 include(KDECompilerSettings NO_POLICY_SCOPE)
 
 add_definitions(-DQT_NO_CAST_TO_ASCII

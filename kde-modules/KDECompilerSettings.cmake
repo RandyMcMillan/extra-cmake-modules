@@ -42,6 +42,14 @@ on a target that has source files in a language other than C++.
 Enables exceptions for C++ source files compiled for the
 CMakeLists.txt file in the current directory and all subdirectories.
 
+
+Inclusion of this module defines the following variables:
+
+``ENABLE_BSYMBOLICFUNCTIONS``
+    indicates whether we make use of -Bsymbolic-functions for linking.
+    It ensures libraries bind global function references locally rather than at runtime.
+    This option only has an effect on ELF-based systems.
+
 Since pre-1.0.0.
 #]=======================================================================]
 
@@ -412,6 +420,17 @@ if (MSVC)
     # C4661: 'identifier' : no suitable definition provided for explicit
     #         template instantiation request
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4661")
+endif()
+
+option(ENABLE_BSYMBOLICFUNCTIONS "Make use of -Bsymbolic-functions" OFF)
+if (ENABLE_BSYMBOLICFUNCTIONS)
+    list(APPEND CMAKE_REQUIRED_LIBRARIES "-Wl,-Bsymbolic-functions")
+    check_cxx_source_compiles( "int main () { return 0; }" BSYMBOLIC_AVAILABLE )
+    list(REMOVE_ITEM CMAKE_REQUIRED_LIBRARIES "-Wl,-Bsymbolic-functions")
+    if (BSYMBOLIC_AVAILABLE)
+        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-Bsymbolic-functions")
+        set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-Bsymbolic-functions")
+    endif()
 endif()
 
 if (WIN32)
