@@ -414,6 +414,17 @@ if (MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4661")
 endif()
 
+option(ENABLE_BSYMBOLICFUNCTIONS "Make use of -Bsymbolic-functions" OFF)
+if (ENABLE_BSYMBOLICFUNCTIONS)
+    list(APPEND CMAKE_REQUIRED_LIBRARIES "-Wl,-Bsymbolic-functions")
+    check_cxx_source_compiles( "int main () { return 0; }" BSYMBOLIC_AVAILABLE )
+    list(REMOVE_ITEM CMAKE_REQUIRED_LIBRARIES "-Wl,-Bsymbolic-functions")
+    if (BSYMBOLIC_AVAILABLE)
+        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-Bsymbolic-functions")
+        set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-Bsymbolic-functions")
+    endif()
+endif()
+
 if (WIN32)
     # Disable deprecation warnings for some API
     # FIXME: do we really want this?
