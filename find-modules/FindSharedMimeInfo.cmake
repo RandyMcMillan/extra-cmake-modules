@@ -25,9 +25,7 @@ The follow macro is available::
 
   update_xdg_mimetypes(<path>)
 
-Updates the XDG mime database at install time (unless the ``$DESTDIR``
-environment variable is set, in which case it is up to package managers to
-perform this task).
+Updates the XDG mime database at install time.
 
 Since pre-1.0.0.
 #]=======================================================================]
@@ -76,13 +74,10 @@ function(UPDATE_XDG_MIMETYPES _path)
 
     # Note that targets and most variables are not available to install code
     install(CODE "
-set(DESTDIR_VALUE \"\$ENV{DESTDIR}\")
-if (NOT DESTDIR_VALUE)
-    # under Windows relative paths are used, that's why it runs from CMAKE_INSTALL_PREFIX
-    message(STATUS \"Updating MIME database at \${CMAKE_INSTALL_PREFIX}/${_xdgmimeDir}\")
-    execute_process(COMMAND \"${UPDATE_MIME_DATABASE_EXECUTABLE}\" -n \"${_xdgmimeDir}\"
-                    WORKING_DIRECTORY \"\${CMAKE_INSTALL_PREFIX}\")
-endif (NOT DESTDIR_VALUE)
+# under Windows relative paths are used, that's why it runs from CMAKE_INSTALL_PREFIX
+message(STATUS \"Updating MIME database at \$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${_xdgmimeDir}\")
+execute_process(COMMAND \"${UPDATE_MIME_DATABASE_EXECUTABLE}\" -n \"${_xdgmimeDir}\"
+                WORKING_DIRECTORY \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}\")
 ")
 endfunction()
 
