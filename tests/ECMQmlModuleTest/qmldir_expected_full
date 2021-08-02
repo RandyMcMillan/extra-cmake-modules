@@ -1,0 +1,3 @@
+module Test
+plugin TestModule
+QmlModule 1.0 QmlModule.qml
