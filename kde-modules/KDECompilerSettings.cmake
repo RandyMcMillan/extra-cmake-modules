@@ -26,7 +26,7 @@ Since 5.85 newer settings are controlled by a variable
 ``KDE_COMPILERSETTINGS_LEVEL``, taking an ECM version as value. That
 version can not be greater than the minimum required ECM version.
 The settings which are default at that version will then be used,
-but can be overriden by more fine-grained controls (see respective settings).
+but can be overridden by more fine-grained controls (see respective settings).
 This variable needs to be set before including this module, otherwise
 defaults to the minimum required ECM version.
 
@@ -48,7 +48,7 @@ Otherwise:
 - ``CMAKE_C_EXTENSIONS``: not modified
 
 If the variable ``CMAKE_C_STANDARD`` is already set when including this module,
-none of the above variables will be modifed.
+none of the above variables will be modified.
 
 The following CMake C++ standard default variables are set:
 
@@ -65,7 +65,7 @@ Otherwise:
 - ``CMAKE_CXX_EXTENSIONS``: not modified.
 
 If the variable ``CMAKE_CXX_STANDARD`` is already set when including this module,
-none of the above variables will be modifed.
+none of the above variables will be modified.
 
 
 The following C++ compiler flags are set:
@@ -135,6 +135,23 @@ on a target that has source files in a language other than C++.
 Enables exceptions for C++ source files compiled for the
 CMakeLists.txt file in the current directory and all subdirectories.
 
+Variables
+~~~~~~~~~
+
+Inclusion of this module defines the following variables:
+
+``ENABLE_BSYMBOLICFUNCTIONS``
+    indicates whether we make use of -Bsymbolic-functions for linking.
+    It ensures libraries bind global function references locally rather than
+    at runtime.
+    This option only has an effect on ELF-based systems.
+
+    The option is disabled by default except when using
+    KDEFrameworkCompilerSettings.cmake where it's enabled. Projects can enable
+    it by calling set(ENABLE_BSYMBOLICFUNCTIONS ON) or passing -DENABLE
+    BSYMBOLICFUNCTIONS=ON when configuring the build directory.
+
+    Since 5.85
 
 Example usages:
 
@@ -197,11 +214,12 @@ Since pre-1.0.0.
 # will offer as settings, the minimum required version of ECM sets the upper
 # limit then for the level version.
 if(NOT DEFINED KDE_COMPILERSETTINGS_LEVEL)
-    set(KDE_COMPILERSETTINGS_LEVEL ${ECM_GLOBAL_FIND_VERSION})
+    set(KDE_INTERNAL_COMPILERSETTINGS_LEVEL "${ECM_GLOBAL_FIND_VERSION}")
 else()
-    if(KDE_COMPILERSETTINGS_LEVEL VERSION_GREATER ${ECM_GLOBAL_FIND_VERSION})
-        message(FATAL "KDE_COMPILERSETTINGS_LEVEL cannot be newer than the min. required ECM version.")
+    if(KDE_COMPILERSETTINGS_LEVEL VERSION_GREATER "${ECM_GLOBAL_FIND_VERSION}")
+        message(FATAL_ERROR "KDE_COMPILERSETTINGS_LEVEL (${KDE_COMPILERSETTINGS_LEVEL}) cannot be newer than the min. required ECM version (${ECM_GLOBAL_FIND_VERSION}).")
     endif()
+    set(KDE_INTERNAL_COMPILERSETTINGS_LEVEL "${KDE_COMPILERSETTINGS_LEVEL}")
 endif()
 
 include("${ECM_MODULE_DIR}/ECMSourceVersionControl.cmake")
@@ -333,6 +351,10 @@ if (WIN32)
     # As stated in http://msdn.microsoft.com/en-us/library/4hwaceh6.aspx M_PI only gets defined
     # if _USE_MATH_DEFINES is defined, with mingw this has a similar effect as -D_GNU_SOURCE on math.h
     _kde_add_platform_definitions(-D_USE_MATH_DEFINES)
+
+    # Don't define MIN and MAX in windows.h
+    # the defines break the use of std::max
+    _kde_add_platform_definitions(-DNOMINMAX)
 endif()
 
 
@@ -343,7 +365,7 @@ endif()
 
 # Pick sensible versions of the C and C++ standards.
 if (NOT CMAKE_C_STANDARD)
-    if (KDE_COMPILERSETTINGS_LEVEL VERSION_GREATER_EQUAL 5.85.0)
+    if (KDE_INTERNAL_COMPILERSETTINGS_LEVEL VERSION_GREATER_EQUAL 5.85.0)
         set(CMAKE_C_STANDARD 99)
         set(CMAKE_C_STANDARD_REQUIRED TRUE)
         set(CMAKE_C_EXTENSIONS OFF)
@@ -352,7 +374,7 @@ if (NOT CMAKE_C_STANDARD)
     endif()
 endif()
 if (NOT CMAKE_CXX_STANDARD)
-    if (KDE_COMPILERSETTINGS_LEVEL VERSION_GREATER_EQUAL 5.85.0)
+    if (KDE_INTERNAL_COMPILERSETTINGS_LEVEL VERSION_GREATER_EQUAL 5.85.0)
         set(CMAKE_CXX_STANDARD 17)
         set(CMAKE_CXX_EXTENSIONS OFF)
     else()
@@ -584,6 +606,21 @@ if (MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4661")
 endif()
 
+option(ENABLE_BSYMBOLICFUNCTIONS "Make use of -Bsymbolic-functions" OFF)
+if (ENABLE_BSYMBOLICFUNCTIONS)
+    set(_SYMBOLIC_FUNCTIONS_COMPILER_OPTION "-Wl,-Bsymbolic-functions")
+    list(APPEND CMAKE_REQUIRED_LIBRARIES "${_SYMBOLIC_FUNCTIONS_COMPILER_OPTION}")
+
+    include(CheckCXXSourceCompiles)
+
+    check_cxx_source_compiles( "int main () { return 0; }" BSYMBOLICFUNCTIONS_AVAILABLE )
+    list(REMOVE_ITEM CMAKE_REQUIRED_LIBRARIES "${_SYMBOLIC_FUNCTIONS_COMPILER_OPTION}")
+    if (BSYMBOLICFUNCTIONS_AVAILABLE)
+        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${_SYMBOLIC_FUNCTIONS_COMPILER_OPTION}")
+        set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${_SYMBOLIC_FUNCTIONS_COMPILER_OPTION}")
+    endif()
+endif()
+
 if (WIN32)
     # Disable deprecation warnings for some API
     # FIXME: do we really want this?
@@ -607,7 +644,7 @@ endif()
 
 function(_kde_set_default_skip_variable_by_min_ecm _var_name _ecm_version)
     if(NOT DEFINED ${_var_name})
-        if (KDE_COMPILERSETTINGS_LEVEL VERSION_LESS ${_ecm_version})
+        if (KDE_INTERNAL_COMPILERSETTINGS_LEVEL VERSION_LESS ${_ecm_version})
             set(${_var_name} TRUE PARENT_SCOPE)
         else()
             set(${_var_name} FALSE PARENT_SCOPE)
@@ -616,10 +653,12 @@ function(_kde_set_default_skip_variable_by_min_ecm _var_name _ecm_version)
 endfunction()
 
 if(NOT DEFINED KDE_QT_MODERNCODE_DEFINITIONS_LEVEL)
-    set(KDE_QT_MODERNCODE_DEFINITIONS_LEVEL ${KDE_COMPILERSETTINGS_LEVEL})
+    set(KDE_INTERNAL_QT_MODERNCODE_DEFINITIONS_LEVEL ${KDE_INTERNAL_COMPILERSETTINGS_LEVEL})
+else()
+    set(KDE_INTERNAL_QT_MODERNCODE_DEFINITIONS_LEVEL ${KDE_QT_MODERNCODE_DEFINITIONS_LEVEL})
 endif()
 
-if (KDE_QT_MODERNCODE_DEFINITIONS_LEVEL VERSION_GREATER_EQUAL "5.85.0")
+if (KDE_INTERNAL_QT_MODERNCODE_DEFINITIONS_LEVEL VERSION_GREATER_EQUAL "5.85.0")
     add_definitions(
         -DQT_NO_CAST_TO_ASCII
         -DQT_NO_CAST_FROM_ASCII
@@ -709,3 +748,10 @@ endif()
 
 include("${ECM_MODULE_DIR}/ECMEnableSanitizers.cmake")
 include("${ECM_MODULE_DIR}/ECMCoverageOption.cmake")
+
+############################################################
+# Clean-up
+############################################################
+# unset again, to not leak into caller scope and avoid usage there
+set(KDE_INTERNAL_COMPILERSETTINGS_LEVEL)
+set(KDE_INTERNAL_QT_MODERNCODE_DEFINITIONS_LEVEL)
