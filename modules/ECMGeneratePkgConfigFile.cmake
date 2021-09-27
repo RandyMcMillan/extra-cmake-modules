@@ -36,7 +36,7 @@ not exposed to applications should be marked with ``PRIVATE``. The default
 is ``PUBLIC``, but note that according to the
 `Guide to pkg-config <https://people.freedesktop.org/~dbn/pkg-config-guide.html>`
 marking dependencies as private is usually preferred. The ``PUBLIC`` and
-``PRIVATE`` keywords are supported since 5.81.0.
+``PRIVATE`` keywords are supported since 5.89.0.
 
 ``FILENAME_VAR`` is specified with a variable name. This variable will
 receive the location of the generated file will be set, within the build
