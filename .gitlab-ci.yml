@@ -3,3 +3,12 @@
 
 include:
   - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux.yml
+
+
+build_docs:
+    stage: build
+    image: debian:stable
+    before_script:
+      - apt-get update && apt-get install --yes --no-install-recommends cmake ninja-build make gcc libc6-dev umps3 sphinx-common qttools5-dev-tools
+    script:
+      - mkdir build && cd build && cmake .. && cmake --build .
