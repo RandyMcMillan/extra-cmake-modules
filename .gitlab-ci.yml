@@ -1,5 +1,22 @@
 # SPDX-FileCopyrightText: 2020 Volker Krause <vkrause@kde.org>
 # SPDX-License-Identifier: CC0-1.0
 
-include:
-  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux.yml
+#include:
+#  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux.yml
+
+
+build_docs:
+    stage: build
+    image: debian:bullseye-slim
+    before_script:
+      - apt-get update && apt-get install --yes --no-install-recommends cmake ninja-build make gcc libc6-dev umps3 python3-sphinx sphinx-common python3-sphinxcontrib.qthelp
+    script:
+      - mkdir build && cd build && cmake .. && cmake --build .
+
+pages:
+    stage: deploy
+    script:
+      - cp -r ${CI_BUILDS_DIR}/docs/html/* public
+    artifacts:
+      paths:
+        - public
