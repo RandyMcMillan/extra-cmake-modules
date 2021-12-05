@@ -63,12 +63,21 @@ WaylandScanner is required and will be searched for.
 Since 1.4.0.
 #]=======================================================================]
 
+include(${CMAKE_CURRENT_LIST_DIR}/../modules/QtVersionOption.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/ECMFindModuleHelpersStub.cmake)
-include("${ECM_MODULE_DIR}/ECMQueryQmake.cmake")
-
 ecm_find_package_version_check(QtWaylandScanner)
 
-query_qmake(qt_binaries_dir QT_HOST_BINS)
+if (QT_MAJOR_VERSION STREQUAL "5")
+    include("${ECM_MODULE_DIR}/ECMQueryQmake.cmake")
+    query_qmake(qt_binaries_dir QT_HOST_BINS)
+elseif(QT_MAJOR_VERSION STREQUAL "6")
+    find_package(Qt6HostInfo)
+    if(NOT QT_HOST_PATH STREQUAL "") # Cross-compiling? use QT_HOST_PATH
+        set(qt_binaries_dir "${QT_HOST_PATH}/${QT${QT_MAJOR_VERSION}_HOST_INFO_LIBEXECDIR}")
+    else()
+        set(qt_binaries_dir "${QT${QT_MAJOR_VERSION}_INSTALL_PREFIX}/${QT${QT_MAJOR_VERSION}_HOST_INFO_LIBEXECDIR}")
+    endif()
+endif()
 
 # Find qtwaylandscanner
 find_program(QtWaylandScanner_EXECUTABLE NAMES qtwaylandscanner HINTS ${qt_binaries_dir})
