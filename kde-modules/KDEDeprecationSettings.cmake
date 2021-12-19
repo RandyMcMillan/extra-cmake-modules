@@ -17,7 +17,7 @@ for the used format of the added definitions. For "QT" name is internally adjust
   set(QT_MIN_VERSION "5.15.0")
   set(KF5_MIN_VERSION "5.90")
 
-  ecm_set_disabled_deprecation_versions(
+  ecm_set_disabled_deprecation_versions(DEPRECATION_WARNINGS CURRENT_VERSION # Show only deprecation warnings for the currently required version
     QT ${QT_MIN_VERSION}
     KF ${KF5_MIN_VERSION}
     KCOREADDONS 5.89.0 # In case we depend on deprecated KCoreAddons API
@@ -29,17 +29,26 @@ Since 5.90
 #]=======================================================================]
 
 function (ecm_set_disabled_deprecation_versions)
-    math(EXPR is_even_number "${ARGC} % 2")
+    include(CMakeParseArguments)
+    set(oneValueArgs "DEPRECATION_WARNINGS")
+    cmake_parse_arguments(ARGS "" "${oneValueArgs}" "" ${ARGN})
+    if (ARGS_DEPRECATION_WARNINGS)
+        if (NOT "${ARGS_DEPRECATION_WARNINGS}" MATCHES "CURRENT_VERSION|MAJOR_VERSION")
+            mmessage(FATAL_ERROR "Unknown argument given for DEPRECATION_WARNINGS parameter, expected CURRENT_VERSION or MAJOR_VERSION")
+        endif()
+    endif()
+    list(LENGTH ARGS_UNPARSED_ARGUMENTS PAIR_COUNT)
+    math(EXPR is_even_number "${PAIR_COUNT} % 2")
     if (NOT is_even_number EQUAL 0)
         message(FATAL_ERROR "Expected number of argumments an even number of identifiers and version")
     endif()
-    math(EXPR number_pairs "(${ARGC} / 2) - 1")
+    math(EXPR number_pairs "(${PAIR_COUNT} / 2) - 1")
     foreach (it RANGE ${number_pairs})
         # get values
         math(EXPR current_index "${it} * 2")
-        list(GET ARGN ${current_index} DEPRECATION_NAME)
+        list(GET ARGS_UNPARSED_ARGUMENTS ${current_index} DEPRECATION_NAME)
         math(EXPR next_index "(${it} *2) + 1")
-        list(GET ARGN ${next_index} DEPRECATION_VERSION)
+        list(GET ARGS_UNPARSED_ARGUMENTS ${next_index} DEPRECATION_VERSION)
 
         # get the string identifier for the target definition
         string(COMPARE EQUAL ${DEPRECATION_NAME} "QT" IS_QT_DEPRECATION)
@@ -48,7 +57,6 @@ function (ecm_set_disabled_deprecation_versions)
         else()
             set(DEPRECATION_DEFINITION_NAME ${DEPRECATION_NAME}_DISABLE_DEPRECATED_BEFORE_AND_AT)
         endif()
-
         # we want to be able to set this version without being forced to edit the CMakeLists.txt file
         if (${${DEPRECATION_DEFINITION_NAME}})
             set(DEPRECATION_VERSION "${${DEPRECATION_DEFINITION_NAME}}")
@@ -60,6 +68,23 @@ function (ecm_set_disabled_deprecation_versions)
         # add the actual compile definition with the given hex value
         _ecm_geh_generate_hex_number_from_version(DEPRECATION_HEX_VERSION ${DEPRECATION_VERSION})
         add_definitions(-D${DEPRECATION_DEFINITION_NAME}_DISABLE_DEPRECATED_BEFORE_AND_AT=${DEPRECATION_HEX_VERSION})
+
+        # Set the version for the deprecation warnings
+        if (ARGS_DEPRECATION_WARNINGS)
+            if (ARGS_DEPRECATION_WARNINGS STREQUAL "CURRENT_VERSION")
+                add_definitions(-D${DEPRECATION_NAME}_DEPRECATED_WARNINGS_SINCE=${DEPRECATION_HEX_VERSION})
+            endif()
+            if (ARGS_DEPRECATION_WARNINGS STREQUAL "MAJOR_VERSION")
+                string(REGEX MATCH "([0-9]+)\\." _ ${DEPRECATION_VERSION})
+                if (NOT CMAKE_MATCH_1)
+                    message(FATAL_ERROR "Failed to get major version from ${DEPRECATION_VERSION}")
+                endif()
+                # Add 1 to the major version and sture it as a hex value
+                math(EXPR next_major_version "(${CMAKE_MATCH_1} + 1) * 65536 " OUTPUT_FORMAT HEXADECIMAL)
+                add_definitions(-D${DEPRECATION_NAME}_DEPRECATED_WARNINGS_SINCE=${next_major_version})
+            endif()
+        endif()
+
     endforeach()
 endfunction()
 
