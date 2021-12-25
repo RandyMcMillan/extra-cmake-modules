@@ -27,7 +27,7 @@ Example usage:
 
 #]=======================================================================]
 
-# try to find qml-format in path
+# try to find qmlformat in path
 find_program(QML_FORMAT_EXECUTABLE qmlformat)
 
 # formatting target
@@ -40,7 +40,7 @@ function(QML_FORMAT)
     # add target without specific commands first, we add the real calls file-per-file to avoid command line length issues
     add_custom_target(qml-format COMMENT "Formatting qml files in ${CMAKE_CURRENT_SOURCE_DIR} with ${QML_FORMAT_EXECUTABLE}...")
 
-    # run qml-format only if available, else signal the user what is missing
+    # run qmlformat only if available, else signal the user what is missing
     if(QML_FORMAT_EXECUTABLE)
         get_filename_component(_binary_dir ${CMAKE_BINARY_DIR} REALPATH)
         foreach(_file ${ARGV})
@@ -63,7 +63,7 @@ function(QML_FORMAT)
     else()
         add_custom_command(TARGET qml-format
             COMMAND
-                ${CMAKE_COMMAND} -E echo "Could not set up the qml-format target as the qml-format executable is missing."
+                ${CMAKE_COMMAND} -E echo "Could not set up the qml-format target as the qmlformat executable is missing."
             )
     endif()
 endfunction()
