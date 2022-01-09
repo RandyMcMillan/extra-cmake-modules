@@ -624,6 +624,16 @@ if (ENABLE_BSYMBOLICFUNCTIONS)
     if (BSYMBOLICFUNCTIONS_AVAILABLE)
         set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${_SYMBOLIC_FUNCTIONS_COMPILER_OPTION}")
         set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${_SYMBOLIC_FUNCTIONS_COMPILER_OPTION}")
+
+        # With Qt6, position independent code isn't unconditionally forced by Qt anymore
+        # but we still need it in particular when using -Bsymbolic-functions as otherwise
+        # function pointer based connects or method/signal lookups can fail.
+        # See also https://bugreports.qt.io/browse/QTBUG-86173
+        include(${CMAKE_CURRENT_LIST_DIR}/../modules/QtVersionOption.cmake)
+        if (QT_MAJOR_VERSION EQUAL "6")
+            set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+            cmake_policy(SET CMP0083 NEW)
+        endif()
     endif()
 endif()
 
