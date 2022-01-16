@@ -7,9 +7,9 @@ include:
   - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/freebsd.yml
   - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux-qt6.yml
 
-pages:
-    only:
-      - tags
+docs:
+  #    only:
+  #    - tags
     stage: deploy
     image: debian:bullseye-slim
     before_script:
@@ -19,5 +19,4 @@ pages:
       - mkdir ${CI_PROJECT_DIR}/public && cp -vr ${CI_PROJECT_DIR}/build/docs/html/* ${CI_PROJECT_DIR}/public
     artifacts:
       name: ecm-docs-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA}
-      paths:
-        - ${CI_PROJECT_DIR}/public
+
