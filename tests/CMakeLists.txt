@@ -37,6 +37,12 @@ add_subdirectory(ECMGenerateHeadersTest)
 add_subdirectory(ECMSetupVersionTest)
 add_subdirectory(ECMGeneratePkgConfigFile)
 
+if (TARGET Qt6::Core)
+    set(QT_VERSION_OPT "-DBUILD_WITH_QT6=ON")
+else()
+    set(QT_VERSION_OPT "-DBUILD_WITH_QT6=OFF")
+endif()
+
 # a macro for tests that have a simple format where the name matches the
 # directory and project
 macro(add_test_variant NAME BASE COMMAND)
@@ -52,7 +58,7 @@ macro(add_test_variant NAME BASE COMMAND)
         --build-makeprogram ${CMAKE_MAKE_PROGRAM}
         --build-project ${proj}
         ${${NAME}_EXTRA_OPTIONS}
-        --test-command ${COMMAND} ${ARGN})
+        --test-command ${COMMAND} ${QT_VERSION_OPT} ${ARGN})
 endmacro()
 macro(add_test_macro NAME)
     add_test_variant("${NAME}" "${NAME}" ${ARGN})
