@@ -268,7 +268,7 @@ function(ecm_add_qml_module ARG_TARGET)
 
     # QQmlImportDatabase::resolvePlugin doesn't accept lib prefixes under
     # Windows, causing to fail to import when using as a dynamic plugin.
-    if (WIN32 AND BUILD_SHARED_LIBS)
+    if (MINGW)
         set_target_properties(${ARG_TARGET} PROPERTIES PREFIX "")
     endif()
 
