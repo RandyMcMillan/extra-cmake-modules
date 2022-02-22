@@ -441,40 +441,41 @@ macro(ecm_add_qtdesignerplugin target)
     endif()
 
     # Check deps
-    # peek at Qt5Core to learn about the version to decide whether Qt5UiPlugin is enough
-    if(NOT Qt5Core_FOUND)
-        find_package(Qt${QT_MAJOR_VERSION}Core QUIET CONFIG)
-    endif()
-    if(Qt5Core_VERSION VERSION_LESS "5.5.0")
+    # Peek at QtTools to learn about the version to decide whether QtUiPlugin is enough
+    find_package(Qt${QT_MAJOR_VERSION}Tools QUIET CONFIG)
+
+    if(Qt${QT_MAJOR_VERSION}Tools VERSION_LESS "5.5.0")
         set(_qtdesigner_tobefound TRUE)
-    elseif(Qt5Core_VERSION VERSION_LESS "5.9.0")
+    elseif(Qt${QT_MAJOR_VERSION}Tools VERSION_LESS "5.9.0")
         set(_qtdesigner_tobefound TRUE)
         set(_qtuiplugin_tobefound TRUE)
     else()
-        # Since Qt 5.9 only Qt5UiPlugin is needed
+        # Since Qt 5.9 only Qt${QT_MAJOR_VERSION}UiPlugin is needed
         set(_qtuiplugin_tobefound TRUE)
     endif()
-    if(NOT Qt5Designer_FOUND AND _qtdesigner_tobefound)
+    if(_qtdesigner_tobefound)
         find_package(Qt${QT_MAJOR_VERSION}Designer QUIET CONFIG)
         set_package_properties(Qt${QT_MAJOR_VERSION}Designer PROPERTIES
             PURPOSE "Required to build Qt Designer plugins"
             TYPE REQUIRED
         )
     endif()
-    if(NOT Qt5UiPlugin_FOUND AND _qtuiplugin_tobefound)
+    if(_qtuiplugin_tobefound)
         find_package(Qt${QT_MAJOR_VERSION}UiPlugin QUIET CONFIG)
         set_package_properties(Qt${QT_MAJOR_VERSION}UiPlugin PROPERTIES
             PURPOSE "Required to build Qt Designer plugins"
             TYPE REQUIRED
         )
     endif()
-    if (Qt5Designer_FOUND)
+    if (TARGET Qt${QT_MAJOR_VERSION}::Designer)
         set(_qtdesigner_tobefound FALSE)
     endif()
-    if (Qt5UiPlugin_FOUND)
+    if (TARGET Qt${QT_MAJOR_VERSION}::UiPlugin)
         set(_qtuiplugin_tobefound FALSE)
-        # in some old versions Qt5UiPlugin does not set its _INCLUDE_DIRS variable. Fill it manually
-        get_target_property(Qt5UiPlugin_INCLUDE_DIRS Qt5::UiPlugin INTERFACE_INCLUDE_DIRECTORIES)
+        if(QT_MAJOR_VERSION STREQUAL "5")
+            # in some old versions Qt5UiPlugin does not set its _INCLUDE_DIRS variable. Fill it manually
+            get_target_property(Qt5UiPlugin_INCLUDE_DIRS Qt5::UiPlugin INTERFACE_INCLUDE_DIRECTORIES)
+        endif()
     endif()
 
     # setup plugin only if designer/uiplugin libs were found, as we do not abort hard the cmake run otherwise
@@ -535,7 +536,7 @@ macro(ecm_add_qtdesignerplugin target)
             )
             file(REMOVE "${_rc_work_file}")
 
-            qt5_add_resources(_srcs ${_rc_file})
+            qt_add_resources(_srcs ${_rc_file})
         endif()
 
         # generate source file
@@ -619,8 +620,8 @@ QList<QDesignerCustomWidgetInterface*> ${_collection_classname}::customWidgets()
 
         # setup plugin binary
         add_library(${target} MODULE ${_srcs})
-        if(Qt5UiPlugin_VERSION AND Qt5UiPlugin_VERSION VERSION_GREATER_EQUAL 5.9.0)
-            list(APPEND ARGS_LINK_LIBRARIES Qt5::UiPlugin)
+        if(TARGET Qt${QT_MAJOR_VERSION}::UiPlugin AND Qt${QT_MAJOR_VERSION}UiPlugin_VERSION VERSION_GREATER_EQUAL 5.9.0)
+            list(APPEND ARGS_LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::UiPlugin)
         else()
             # For Qt <5.9 include dir variables needed
             target_include_directories(${target}
