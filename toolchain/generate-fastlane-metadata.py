@@ -343,7 +343,8 @@ def processAppstreamFile(appstreamFileName, desktopFileName, iconBaseName):
         remote = upstream_ref.split('/')[2]
         output = subprocess.check_output(['git', 'remote', 'show', '-n', remote], cwd=arguments.source).decode('utf-8')
         result = re.search(' Fetch URL: (.*)\n', output)
-        data['source-repo'] = result.group(1)
+        if result:
+            data['source-repo'] = result.group(1)
 
     # write meta data
     createFastlaneFile( applicationName, "title.txt", data['name'] )
