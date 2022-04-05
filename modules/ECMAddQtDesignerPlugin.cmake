@@ -444,213 +444,189 @@ macro(ecm_add_qtdesignerplugin target)
     # Peek at QtCore to learn about the version to decide whether QtUiPlugin is enough
     find_package(Qt${QT_MAJOR_VERSION}Core QUIET CONFIG)
 
-    if(Qt${QT_MAJOR_VERSION}Core_VERSION VERSION_LESS "5.5.0")
-        set(_qtdesigner_tobefound TRUE)
-    elseif(Qt${QT_MAJOR_VERSION}Core_VERSION VERSION_LESS "5.9.0")
-        set(_qtdesigner_tobefound TRUE)
-        set(_qtuiplugin_tobefound TRUE)
-    else()
-        # Since Qt 5.9 only Qt${QT_MAJOR_VERSION}UiPlugin is needed
-        set(_qtuiplugin_tobefound TRUE)
-    endif()
-    if(_qtdesigner_tobefound)
-        find_package(Qt${QT_MAJOR_VERSION}Designer QUIET CONFIG)
-        set_package_properties(Qt${QT_MAJOR_VERSION}Designer PROPERTIES
-            PURPOSE "Required to build Qt Designer plugins"
-            TYPE REQUIRED
-        )
-    endif()
-    if(_qtuiplugin_tobefound)
-        find_package(Qt${QT_MAJOR_VERSION}UiPlugin QUIET CONFIG)
-        set_package_properties(Qt${QT_MAJOR_VERSION}UiPlugin PROPERTIES
-            PURPOSE "Required to build Qt Designer plugins"
-            TYPE REQUIRED
-        )
-    endif()
-    if (TARGET Qt${QT_MAJOR_VERSION}::Designer)
-        set(_qtdesigner_tobefound FALSE)
-    endif()
-    if (TARGET Qt${QT_MAJOR_VERSION}::UiPlugin)
-        set(_qtuiplugin_tobefound FALSE)
-        if(QT_MAJOR_VERSION STREQUAL "5")
-            # in some old versions Qt5UiPlugin does not set its _INCLUDE_DIRS variable. Fill it manually
-            get_target_property(Qt5UiPlugin_INCLUDE_DIRS Qt5::UiPlugin INTERFACE_INCLUDE_DIRECTORIES)
-        endif()
-    endif()
-
-    # setup plugin only if designer/uiplugin libs were found, as we do not abort hard the cmake run otherwise
-    if(NOT _qtdesigner_tobefound AND NOT _qtuiplugin_tobefound)
-        set(_generation_dir "${CMAKE_CURRENT_BINARY_DIR}/${target}_ECMQtDesignerPlugin")
-        file(MAKE_DIRECTORY "${_generation_dir}")
-        set(_rc_icon_dir "/${ARGS_NAME}/designer")
-
-        # process defaults for widgets
-        foreach(_widget ${ARGS_WIDGETS})
-            set(_class_name "${ECM_QTDESIGNERPLUGIN_${_widget}_CLASS_NAME}")
-            # include file
-            set(_include_file "${ECM_QTDESIGNERPLUGIN_${_widget}_INCLUDE_FILE}")
-            if(NOT _include_file)
-                set(_include_file "${_class_name}")
-                if (ARGS_DEFAULT_HEADER_CASE STREQUAL "LOWER_CASE")
-                    string(TOLOWER "${_include_file}" _include_file)
-                elseif(ARGS_DEFAULT_HEADER_CASE STREQUAL "UPPER_CASE")
-                    string(TOUPPER "${_include_file}" _include_file)
-                endif()
-                # turn any namespaces into dir levels
-                string(REPLACE "::" "/" _include_file ${_include_file})
-                set(ECM_QTDESIGNERPLUGIN_${_widget}_INCLUDE_FILE "${_include_file}.${ARGS_DEFAULT_HEADER_EXTENSION}")
-            endif()
-            # icon
-            set(_icon "${ECM_QTDESIGNERPLUGIN_${_widget}_ICON}")
-            if(NOT _icon)
-                string(TOLOWER "${_class_name}" _icon)
-                # handle any namespaces
-                string(REPLACE "::" "_" _icon "${_icon}")
-                set(_icon "${ARGS_DEFAULT_ICON_DIR}/${_icon}.png")
-                if(EXISTS "${_icon}")
-                    set(ECM_QTDESIGNERPLUGIN_${_widget}_ICON "${_icon}")
-                endif()
-            endif()
-        endforeach()
-
-        set(_plugin_src_file "${_generation_dir}/designerplugin.cpp")
-        set(_srcs
-            ${ARGS_SOURCES}
-            ${_plugin_src_file}
-        )
-
-        set(_icons)
-        foreach(_widget ${ARGS_WIDGETS})
-            list(APPEND _icons "${ECM_QTDESIGNERPLUGIN_${_widget}_ICON}")
-        endforeach()
-
-        # generate qrc file with icons
-        if (_icons)
-            set(_rc_file "${_generation_dir}/designerplugin.rc")
-            set(_rc_work_file "${_rc_file}.work")
-
-            _ecm_qtdesignerplugin_write_icon_qrc_file("${_rc_work_file}" "${_rc_icon_dir}" ${_icons})
-            # avoid rebuilding if there was no change
-            execute_process(
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different "${_rc_work_file}" "${_rc_file}"
-            )
-            file(REMOVE "${_rc_work_file}")
-
-            qt_add_resources(_srcs ${_rc_file})
-        endif()
-
-        # generate source file
-        set(_collection_classname "${ARGS_NAME}QtDesignerWidgetCollection")
-
-        set(_include_files
-            # classes inherited
-            QDesignerCustomWidgetCollectionInterface
-            QDesignerCustomWidgetInterface
-            QObject
-            # classes used
-            QIcon
-            QString
-            ${ARGS_INCLUDE_FILES}
-        )
-        foreach(_widget ${ARGS_WIDGETS})
-            list(APPEND _include_files ${ECM_QTDESIGNERPLUGIN_${_widget}_INCLUDE_FILE})
-        endforeach()
-        list(REMOVE_DUPLICATES _include_files)
-
-        set(_plugin_src_work_file "${_plugin_src_file}.work")
-        file(WRITE ${_plugin_src_work_file} "// DO NOT EDIT! Generated from ecm_add_qtdesignerplugin()\n\n")
-        foreach(_include_file ${_include_files})
-            if (NOT ${_include_file} MATCHES "^[\"<]")
-                set(_include_file "<${_include_file}>")
-            endif()
-            file(APPEND ${_plugin_src_work_file} "#include ${_include_file}\n")
-        endforeach()
-        foreach(_widget ${ARGS_WIDGETS})
-            _ecm_qtdesignerplugin_write_widget(${_plugin_src_work_file} ${_widget} ${ARGS_DEFAULT_GROUP} ${_rc_icon_dir})
-        endforeach()
-        file(APPEND ${_plugin_src_work_file} "
-class ${_collection_classname}
-    : public QObject
-    , public QDesignerCustomWidgetCollectionInterface
-{
-    Q_OBJECT
-    Q_INTERFACES(
-        QDesignerCustomWidgetCollectionInterface
+    # Since Qt 5.9 only Qt${QT_MAJOR_VERSION}UiPlugin is needed
+    find_package(Qt${QT_MAJOR_VERSION}UiPlugin QUIET CONFIG)
+    set_package_properties(Qt${QT_MAJOR_VERSION}UiPlugin PROPERTIES
+        PURPOSE "Required to build Qt Designer plugins"
+        TYPE REQUIRED
     )
 
-    Q_PLUGIN_METADATA(IID \"org.qt-project.Qt.QDesignerCustomWidgetInterface\")
+    # setup plugin only if uiplugin libs were found, as we do not abort hard the cmake run otherwise
+    if (NOT TARGET Qt${QT_MAJOR_VERSION}::UiPlugin)
+        message("Could not find Qt${QT_MAJOR_VERSION}::UiPlugin, the Qt Designer plugins will not be created.")
+        return()
+    endif()
+
+    set(_generation_dir "${CMAKE_CURRENT_BINARY_DIR}/${target}_ECMQtDesignerPlugin")
+    file(MAKE_DIRECTORY "${_generation_dir}")
+    set(_rc_icon_dir "/${ARGS_NAME}/designer")
+
+    # process defaults for widgets
+    foreach(_widget ${ARGS_WIDGETS})
+        set(_class_name "${ECM_QTDESIGNERPLUGIN_${_widget}_CLASS_NAME}")
+        # include file
+        set(_include_file "${ECM_QTDESIGNERPLUGIN_${_widget}_INCLUDE_FILE}")
+        if(NOT _include_file)
+            set(_include_file "${_class_name}")
+            if (ARGS_DEFAULT_HEADER_CASE STREQUAL "LOWER_CASE")
+                string(TOLOWER "${_include_file}" _include_file)
+            elseif(ARGS_DEFAULT_HEADER_CASE STREQUAL "UPPER_CASE")
+                string(TOUPPER "${_include_file}" _include_file)
+            endif()
+            # turn any namespaces into dir levels
+            string(REPLACE "::" "/" _include_file ${_include_file})
+            set(ECM_QTDESIGNERPLUGIN_${_widget}_INCLUDE_FILE "${_include_file}.${ARGS_DEFAULT_HEADER_EXTENSION}")
+        endif()
+        # icon
+        set(_icon "${ECM_QTDESIGNERPLUGIN_${_widget}_ICON}")
+        if(NOT _icon)
+            string(TOLOWER "${_class_name}" _icon)
+            # handle any namespaces
+            string(REPLACE "::" "_" _icon "${_icon}")
+            set(_icon "${ARGS_DEFAULT_ICON_DIR}/${_icon}.png")
+            if(EXISTS "${_icon}")
+                set(ECM_QTDESIGNERPLUGIN_${_widget}_ICON "${_icon}")
+            endif()
+        endif()
+    endforeach()
+
+    set(_plugin_src_file "${_generation_dir}/designerplugin.cpp")
+    set(_srcs
+        ${ARGS_SOURCES}
+        ${_plugin_src_file}
+    )
+
+    set(_icons)
+    foreach(_widget ${ARGS_WIDGETS})
+        list(APPEND _icons "${ECM_QTDESIGNERPLUGIN_${_widget}_ICON}")
+    endforeach()
+
+    # generate qrc file with icons
+    if (_icons)
+        set(_rc_file "${_generation_dir}/designerplugin.rc")
+        set(_rc_work_file "${_rc_file}.work")
+
+        _ecm_qtdesignerplugin_write_icon_qrc_file("${_rc_work_file}" "${_rc_icon_dir}" ${_icons})
+        # avoid rebuilding if there was no change
+        execute_process(
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${_rc_work_file}" "${_rc_file}"
+        )
+        file(REMOVE "${_rc_work_file}")
+
+        qt_add_resources(_srcs ${_rc_file})
+    endif()
+
+    # generate source file
+    set(_collection_classname "${ARGS_NAME}QtDesignerWidgetCollection")
+
+    set(_include_files
+        # classes inherited
+        QDesignerCustomWidgetCollectionInterface
+        QDesignerCustomWidgetInterface
+        QObject
+        # classes used
+        QIcon
+        QString
+        ${ARGS_INCLUDE_FILES}
+    )
+    foreach(_widget ${ARGS_WIDGETS})
+        list(APPEND _include_files ${ECM_QTDESIGNERPLUGIN_${_widget}_INCLUDE_FILE})
+    endforeach()
+    list(REMOVE_DUPLICATES _include_files)
+
+    set(_plugin_src_work_file "${_plugin_src_file}.work")
+    file(WRITE ${_plugin_src_work_file} "// DO NOT EDIT! Generated from ecm_add_qtdesignerplugin()\n\n")
+    foreach(_include_file ${_include_files})
+        if (NOT ${_include_file} MATCHES "^[\"<]")
+            set(_include_file "<${_include_file}>")
+        endif()
+        file(APPEND ${_plugin_src_work_file} "#include ${_include_file}\n")
+    endforeach()
+    foreach(_widget ${ARGS_WIDGETS})
+        _ecm_qtdesignerplugin_write_widget(${_plugin_src_work_file} ${_widget} ${ARGS_DEFAULT_GROUP} ${_rc_icon_dir})
+    endforeach()
+    file(APPEND ${_plugin_src_work_file} "
+class ${_collection_classname}
+: public QObject
+, public QDesignerCustomWidgetCollectionInterface
+{
+Q_OBJECT
+Q_INTERFACES(
+    QDesignerCustomWidgetCollectionInterface
+)
+
+Q_PLUGIN_METADATA(IID \"org.qt-project.Qt.QDesignerCustomWidgetInterface\")
 
 public:
-    explicit ${_collection_classname}(QObject* parent = nullptr);
+explicit ${_collection_classname}(QObject* parent = nullptr);
 
 public: // QDesignerCustomWidgetCollectionInterface API
-    QList<QDesignerCustomWidgetInterface*> customWidgets() const override;
+QList<QDesignerCustomWidgetInterface*> customWidgets() const override;
 
 private:
-    QList<QDesignerCustomWidgetInterface*> m_widgetFactories;
+QList<QDesignerCustomWidgetInterface*> m_widgetFactories;
 };
 
 ${_collection_classname}::${_collection_classname}(QObject* parent)
-    : QObject(parent)
+: QObject(parent)
 {
-    m_widgetFactories = QList<QDesignerCustomWidgetInterface*>{
+m_widgetFactories = QList<QDesignerCustomWidgetInterface*>{
 "
-        )
-        foreach(_widget ${ARGS_WIDGETS})
-            file(APPEND ${_plugin_src_work_file} "        new ${ECM_QTDESIGNERPLUGIN_${_widget}_FACTORY_CLASS_NAME}(this),\n")
-        endforeach()
-        file(APPEND ${_plugin_src_work_file}
+    )
+    foreach(_widget ${ARGS_WIDGETS})
+        file(APPEND ${_plugin_src_work_file} "        new ${ECM_QTDESIGNERPLUGIN_${_widget}_FACTORY_CLASS_NAME}(this),\n")
+    endforeach()
+    file(APPEND ${_plugin_src_work_file}
 "    };
 }
 
 QList<QDesignerCustomWidgetInterface*> ${_collection_classname}::customWidgets() const
 {
-    return m_widgetFactories;
+return m_widgetFactories;
 }
 
 #include \"designerplugin.moc\"
 "
+    )
+
+    # avoid rebuilding if there was no change
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${_plugin_src_work_file}" "${_plugin_src_file}"
+    )
+    file(REMOVE "${_plugin_src_work_file}")
+
+    # setup plugin binary
+    add_library(${target} MODULE ${_srcs})
+    if(TARGET Qt${QT_MAJOR_VERSION}::UiPlugin AND Qt${QT_MAJOR_VERSION}UiPlugin_VERSION VERSION_GREATER_EQUAL 5.9.0)
+        list(APPEND ARGS_LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::UiPlugin)
+    else()
+        # For Qt <5.9 include dir variables needed
+        target_include_directories(${target}
+            PRIVATE ${Qt5UiPlugin_INCLUDE_DIRS}
+            PRIVATE ${Qt5Designer_INCLUDE_DIRS}
         )
-
-        # avoid rebuilding if there was no change
-        execute_process(
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${_plugin_src_work_file}" "${_plugin_src_file}"
-        )
-        file(REMOVE "${_plugin_src_work_file}")
-
-        # setup plugin binary
-        add_library(${target} MODULE ${_srcs})
-        if(TARGET Qt${QT_MAJOR_VERSION}::UiPlugin AND Qt${QT_MAJOR_VERSION}UiPlugin_VERSION VERSION_GREATER_EQUAL 5.9.0)
-            list(APPEND ARGS_LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::UiPlugin)
-        else()
-            # For Qt <5.9 include dir variables needed
-            target_include_directories(${target}
-                PRIVATE ${Qt5UiPlugin_INCLUDE_DIRS}
-                PRIVATE ${Qt5Designer_INCLUDE_DIRS}
-            )
-        endif()
-        if(NOT WIN32)
-            # Since there are no libraries provided by this module,
-            # there is no point including the build tree in RPath,
-            # and then having to edit it at install time.
-            set_target_properties(${target} PROPERTIES
-                SKIP_BUILD_RPATH TRUE
-                BUILD_WITH_INSTALL_RPATH TRUE
-            )
-        endif()
-        if (ARGS_OUTPUT_NAME)
-            set_target_properties(${target} PROPERTIES
-                OUTPUT_NAME ${ARGS_OUTPUT_NAME}
-            )
-        endif()
-        target_link_libraries(${target} ${ARGS_LINK_LIBRARIES})
-
-        if (DEFINED ARGS_COMPONENT)
-            set(_component COMPONENT ${ARGS_COMPONENT})
-        else()
-            set(_component)
-        endif()
-
-        install(TARGETS ${target} DESTINATION ${ARGS_INSTALL_DESTINATION} ${_component})
     endif()
+    if(NOT WIN32)
+        # Since there are no libraries provided by this module,
+        # there is no point including the build tree in RPath,
+        # and then having to edit it at install time.
+        set_target_properties(${target} PROPERTIES
+            SKIP_BUILD_RPATH TRUE
+            BUILD_WITH_INSTALL_RPATH TRUE
+        )
+    endif()
+    if (ARGS_OUTPUT_NAME)
+        set_target_properties(${target} PROPERTIES
+            OUTPUT_NAME ${ARGS_OUTPUT_NAME}
+        )
+    endif()
+    target_link_libraries(${target} ${ARGS_LINK_LIBRARIES})
+
+    if (DEFINED ARGS_COMPONENT)
+        set(_component COMPONENT ${ARGS_COMPONENT})
+    else()
+        set(_component)
+    endif()
+
+    install(TARGETS ${target} DESTINATION ${ARGS_INSTALL_DESTINATION} ${_component})
 endmacro()
