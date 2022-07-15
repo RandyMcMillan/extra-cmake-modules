@@ -17,7 +17,8 @@ FreeDesktop.org icon naming specification.
   ecm_install_icons(ICONS <icon> [<icon> [...]]
                     DESTINATION <icon_install_dir>
                     [LANG <l10n_code>]
-                    [THEME <theme>])
+                    [THEME <theme>]
+                    [COMPRESS])
 
 The given icons, whose names must match the pattern::
 
@@ -27,7 +28,8 @@ will be installed to the appropriate subdirectory of ``DESTINATION`` according t
 the FreeDesktop.org icon naming scheme. By default, they are installed to the
 "hicolor" theme, but this can be changed using the ``THEME`` argument.  If the
 icons are localized, the LANG argument can be used to install them in a
-locale-specific directory.
+locale-specific directory. If ``COMPRESS`` option is given, plain-text ``.svg``
+icons will be compressed (gzipped) to ``.svgz`` first.
 
 ``<size>`` is a numeric pixel size (typically 16, 22, 32, 48, 64, 128 or 256)
 or ``sc`` for scalable (SVG) files, ``<group>`` is one of the standard
@@ -72,6 +74,7 @@ Since pre-1.0.0.
 #]=======================================================================]
 
 include(CMakeParseArguments)
+find_package(gzip)
 
 # A "map" of short type names to the directories.
 # Unknown names produce a warning.
@@ -209,7 +212,7 @@ function(_ecm_update_iconcache installdir theme)
 endfunction()
 
 function(ecm_install_icons)
-    set(options)
+    set(options COMPRESS)
     set(oneValueArgs DESTINATION LANG THEME)
     set(multiValueArgs ICONS)
     cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
@@ -245,7 +248,7 @@ function(ecm_install_icons)
         elseif(NOT size STREQUAL "sc" AND NOT size GREATER 0)
             message(WARNING "${icon} size (${size}) is invalid - ignoring")
         else()
-            if (NOT complete_match STREQUAL filename)
+            if(NOT complete_match STREQUAL filename)
                 # We can't stop accepting filenames with leading characters,
                 # because that would break existing projects, so just warn
                 # about them instead.
@@ -264,6 +267,35 @@ function(ecm_install_icons)
                     message(WARNING "Fixed-size icon ${icon} is not PNG/MNG/SVG/SVGZ")
                 endif()
                 set(size_dir "${size}x${size}")
+            endif()
+            if(ext STREQUAL "svg" AND ARG_COMPRESS)
+                if(NOT TARGET gzip::gzip)
+                    message(WARNING "Compressing of icon ${icon} is requested but gzip is not found; it will be installed uncompressed")
+                else()
+                    set(_src_icon ${icon})
+                    if (NOT IS_ABSOLUTE ${_src_icon})
+                        set(_src_icon "${CMAKE_CURRENT_SOURCE_DIR}/${_src_icon}")
+                    endif()
+
+                    set(_gzipped "${CMAKE_CURRENT_BINARY_DIR}/${icon}z")
+                    add_custom_command(
+                        OUTPUT ${_gzipped}
+                        COMMAND gzip::gzip
+                        ARGS
+                            -9
+                            -c
+                            ${_src_icon} > ${_gzipped}
+                        DEPENDS ${_src_icon}
+                        COMMENT "Gzipping ${icon}"
+                    )
+
+                    set(_target_name "${ARG_THEME}_graphics_${icon}")
+                    string(REPLACE "/" "_" _target_name "${_target_name}")
+                    add_custom_target(${_target_name} ALL DEPENDS ${_gzipped})
+
+                    set(icon ${_gzipped})
+                    set(ext "svgz")
+                endif()
             endif()
             install(
                 FILES "${icon}"
