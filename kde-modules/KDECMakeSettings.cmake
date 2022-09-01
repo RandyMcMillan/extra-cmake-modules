@@ -46,6 +46,10 @@ for more details.
 This section can be disabled by setting ``KDE_SKIP_TEST_SETTINGS`` to ``TRUE``
 before including this module.
 
+Since 5.98 The existence of CTestConfig.cmake won't cause this module to include
+the CTest module. Apparently CTestConfig.cmake was added to some repos with the
+intention of using my.cdash.org, but no KDE repos are actually making use of
+cdash.org.
 
 Build Settings
 ~~~~~~~~~~~~~~
@@ -171,15 +175,19 @@ if(NOT KDE_SKIP_TEST_SETTINGS)
    # Otherwise, there will not be any useful settings, so just
    # fake the functionality we care about from CTest.
 
-   if (EXISTS ${CMAKE_SOURCE_DIR}/CTestConfig.cmake)
-      include(CTest)
-   else()
-      option(BUILD_TESTING "Build the testing tree." ON)
-      if(BUILD_TESTING)
-         enable_testing()
-         appstreamtest()
-      endif ()
-   endif ()
+    if (EXISTS ${CMAKE_SOURCE_DIR}/CTestConfig.cmake)
+        message(WARNING "Consider removing ${CMAKE_SOURCE_DIR}/CTestConfig.cmake"
+                        " if your project isn't actually using cdash.org. Note that"
+                        " since 5.98, ECM won't automatically include CTest if a"
+                        " CTestConfig.cmake file exists in a project's top level dir"
+                        " any more.")
+    endif()
+
+    option(BUILD_TESTING "Build the testing tree." ON)
+    if(BUILD_TESTING)
+        enable_testing()
+        appstreamtest()
+    endif ()
 
 endif()
 
