@@ -171,15 +171,20 @@ if(NOT KDE_SKIP_TEST_SETTINGS)
    # Otherwise, there will not be any useful settings, so just
    # fake the functionality we care about from CTest.
 
-   if (EXISTS ${CMAKE_SOURCE_DIR}/CTestConfig.cmake)
-      include(CTest)
-   else()
-      option(BUILD_TESTING "Build the testing tree." ON)
-      if(BUILD_TESTING)
-         enable_testing()
-         appstreamtest()
-      endif ()
-   endif ()
+    if (ECM_GLOBAL_FIND_VERSION VERSION_LESS_EQUAL 5.98.0
+        AND EXISTS ${CMAKE_SOURCE_DIR}/CTestConfig.cmake)
+        message(WARNING "Consider removing ${CMAKE_SOURCE_DIR}/CTestConfig.cmake"
+                        " if your project isn't actually using cdash.org. Note that"
+                        " since 5.98, ECM won't automatically include CTest if a"
+                        " CTestConfig.cmake file exists in a project's top level dir"
+                        " any more.")
+    endif()
+
+    option(BUILD_TESTING "Build the testing tree." ON)
+    if(BUILD_TESTING)
+        enable_testing()
+        appstreamtest()
+    endif ()
 
 endif()
 
