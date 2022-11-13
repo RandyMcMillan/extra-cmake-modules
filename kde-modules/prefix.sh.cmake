@@ -1,5 +1,9 @@
 export PATH=@KDE_INSTALL_FULL_BINDIR@:$PATH
 
+if [ -n "$ZSH_EVAL_CONTEXT" ] ; then
+    fpath+=( @KDE_INSTALL_FULL_ZSHAUTOCOMPLETEDIR@ )
+fi
+
 # LD_LIBRARY_PATH only needed if you are building without rpath
 # export LD_LIBRARY_PATH=@KDE_INSTALL_FULL_LIBDIR@:$LD_LIBRARY_PATH
 
