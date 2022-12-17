@@ -1,4 +1,5 @@
-# SPDX-FileCopyrightText: none
+# SPDX-FileCopyrightText: 2022 Christoph Cullmann <cullmann@kde.org>
+# SPDX-FileCopyrightText: 2022 Alexander Lohnau <alexander.lohnau@gmx.de>
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
