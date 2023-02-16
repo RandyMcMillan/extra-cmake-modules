@@ -33,6 +33,7 @@ For preparing some values useful in the context it also provides a function
       [EXCLUDE_DEPRECATED_BEFORE_AND_AT <exclude_deprecated_before_and_at_version>]
       [NO_BUILD_SET_DEPRECATED_WARNINGS_SINCE]
       [NO_DEFINITION_EXPORT_TO_BUILD_INTERFACE]
+      [INCLUDE_FILES <include_file> [<include_file2> [...]]] #  Since 5.104
       [CUSTOM_CONTENT_FROM_VARIABLE <variable>]
   )
 
@@ -89,6 +90,14 @@ without any deprecation warnings for it.
 content will be appended at the end of the generated file, before any
 final inclusion guard closing. Note that before 5.98 this was broken and
 would only append the string passed as argument value.
+
+``INCLUDE_FILES`` specifies the names of files for which include statements
+will be added to the generated file. These statements will be placed
+at the end of the generated file, but before any content from
+``CUSTOM_CONTENT_FROM_VARIABLE`` and the final inclusion guard closing.
+By default angle-brackets are used for the include statement. To generate
+includes with double quotes, add double quotes to the argument string (needs
+escaping), e.g. ``\"header.h\"``. Since 5.104.
 
 The function ``ecm_generate_export_header`` defines C++ preprocessor macros
 in the generated export header, some for use in the sources of the library
@@ -463,6 +472,7 @@ function(ecm_generate_export_header target)
     )
     set(multiValueArgs
         DEPRECATION_VERSIONS
+        INCLUDE_FILES
     )
     cmake_parse_arguments(ARGS "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
@@ -740,6 +750,13 @@ function(ecm_generate_export_header target)
             )
         endif()
     endif()
+    foreach(_include_file ${ARGS_INCLUDE_FILES})
+        if (_include_file MATCHES "^\".+\"$")
+            string(APPEND _output "#include ${_include_file}\n")
+        else()
+            string(APPEND _output "#include <${_include_file}>\n")
+        endif()
+    endforeach()
     if (ARGS_CUSTOM_CONTENT_FROM_VARIABLE)
         if(DEFINED "${ARGS_CUSTOM_CONTENT_FROM_VARIABLE}")
             string(APPEND _output "${${ARGS_CUSTOM_CONTENT_FROM_VARIABLE}}\n")
