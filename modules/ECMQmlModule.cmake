@@ -340,6 +340,7 @@ function(ecm_target_qml_sources ARG_TARGET)
 endfunction()
 
 function(ecm_finalize_qml_module ARG_TARGET)
+    message(WARNING "ecm_finalize_qml_module")
     cmake_parse_arguments(PARSE_ARGV 1 ARG "" "DESTINATION" "")
 
     _ecm_qmlmodule_verify_qml_target(${ARG_TARGET})
@@ -393,6 +394,7 @@ function(ecm_finalize_qml_module ARG_TARGET)
         endif()
     endif()
 
+        message(WARNING "${ARG_DESTINATION}/${_plugin_path} RENAME qmldir")
     add_custom_command(
         TARGET ${ARG_TARGET}
         POST_BUILD

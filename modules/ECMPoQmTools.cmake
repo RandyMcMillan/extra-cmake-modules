@@ -100,6 +100,7 @@ endfunction()
 
 
 function(ecm_create_qm_loader sourcesvar_or_target catalog_name)
+return()
     if (TARGET ${sourcesvar_or_target})
         get_target_property(target_type ${sourcesvar_or_target} TYPE)
         set(allowed_types "EXECUTABLE" "STATIC_LIBRARY" "MODULE_LIBRARY" "SHARED_LIBRARY" "OBJECT_LIBRARY" "INTERFACE_LIBRARY")
@@ -130,6 +131,7 @@ endfunction()
 
 
 function(ecm_process_po_files_as_qm lang)
+return()
     # Parse arguments
     set(options ALL)
     set(oneValueArgs INSTALL_DESTINATION)
@@ -213,6 +215,7 @@ endfunction()
 
 
 function(ecm_install_po_files_as_qm podir)
+return()
     if (LOCALE_INSTALL_DIR)
         set(install_destination "${LOCALE_INSTALL_DIR}")
     elseif (CMAKE_INSTALL_LOCALEDIR)
