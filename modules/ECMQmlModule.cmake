@@ -15,6 +15,10 @@ bundled into the static library. When using a shared build, the QML plugin and
 relevant QML files are copied to the target's ``RUNTIME_OUTPUT_DIRECTORY`` to make
 it easier to run things directly from the build directory.
 
+Since 6.0.0, when using Qt 6, most functionality of this module has been
+implemented by upstream Qt. Most of the functions here will now forward to the
+similar Qt functions.
+
 Example usage:
 
 .. code-block:: cmake
@@ -58,6 +62,11 @@ You can add C++ and QML source files to the target using ``target_sources`` and
 
 Since 5.91.0
 
+Since 6.0.0, when used with Qt 6, this will forward to ``qt_add_qml_module``. Any extra arguments will
+be forwarded as well. The ``NO_PLUGIN`` argument is deprecated and ignored in this case as its
+functionality cannot be replicated with ``qt_add_qml_module``, modules in Qt 6 always require a plugin
+or backing target. If you want to use Qt's behaviour for ``NO_PLUGIN``, use ``QT_NO_PLUGIN`` instead.
+
 ::
 
     ecm_add_qml_module_dependencies(<target> DEPENDS <module string> [<module string> ...])
@@ -66,6 +75,9 @@ Add the list of dependencies specified by the ``DEPENDS`` argument to be listed
 as dependencies in the generated QMLDIR file of ``<target>``.
 
 Since 5.91.0
+
+Since 6.0.0, this is deprecated and ignored when using Qt 6, instead use the ``DEPENDS`` and ``IMPORTS``
+arguments to ``ecm_add_qml_module``.
 
 ::
 
@@ -89,6 +101,14 @@ This function will fail if ``<target>`` is not a QML module target or any of the
 specified files do not exist.
 
 Since 5.91.0
+
+Since 6.0.0, when used with Qt 6, this will forward to ``qt_target_qml_sources()``.
+The ``SOURCES`` argument will be translated to ``QML_SOURCES``. ``VERSION`` and
+``PRIVATE`` will set Qt's ``QT_QML_SOURCE_VERSIONS`` and ``QT_QML_INTERNAL_TYPE``
+properties on ``SOURCES`` before calling ``qt_target_qml_sources()``. Since Qt
+includes the path relative to the current source dir, for each source file a
+resource alias will be generated with the path stripped. If the ``PATH`` argument
+is set, it will be prefixed to the alias.
 
 ::
 
@@ -115,6 +135,9 @@ number of tasks:
 This function will fail if ``<target>`` is not a QML module target.
 
 Since 5.91.0
+
+Since 6.0.0, when using Qt 6, this will instead install the files generated
+by ``qt_add_qml_module``.
 
 #]========================================================================]
 
