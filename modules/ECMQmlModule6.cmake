@@ -97,6 +97,10 @@ endfunction()
 function(ecm_finalize_qml_module ARG_TARGET)
     cmake_parse_arguments(PARSE_ARGV 1 ARG "" "DESTINATION;" "")
 
+    if ("${ARG_DESTINATION}" STREQUAL "")
+        message(FATAL_ERROR "ecm_finalize_qml_module called without required argument DESTINATION")
+    endif()
+
     # This is effectively a workaround for missing upstream API, see QTBUG-100102
 
     qt6_query_qml_module(${ARG_TARGET}
