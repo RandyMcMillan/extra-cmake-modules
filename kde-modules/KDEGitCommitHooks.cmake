@@ -44,9 +44,12 @@ Since 5.79
 
 # try to find clang-format in path
 find_program(KDE_CLANG_FORMAT_EXECUTABLE clang-format)
+find_program(KDE_CHECK_JSONSCHEMA_EXECUTABLE check-jsonschema)
 include(CMakeParseArguments)
 set(PRE_COMMIT_HOOK_UNIX "${CMAKE_CURRENT_LIST_DIR}/kde-git-commit-hooks/pre-commit.in")
 set(CLANG_FORMAT_UNIX "${CMAKE_CURRENT_LIST_DIR}/kde-git-commit-hooks/clang-format.sh")
+set(JSON_SCHEMA_DEFINITION "${CMAKE_CURRENT_LIST_DIR}/kde-git-commit-hooks/kpluginmetadata.schema.json")
+set(JSON_SCHEMA_SCRIPT "${CMAKE_CURRENT_LIST_DIR}/kde-git-commit-hooks/json-schema.py")
 
 function(KDE_CONFIGURE_GIT_PRE_COMMIT_HOOK)
     set(_oneValueArgs "")
@@ -85,6 +88,15 @@ function(KDE_CONFIGURE_GIT_PRE_COMMIT_HOOK)
             set(PRE_COMMIT_SCRIPTS "\"$(git rev-parse --git-common-dir)\"/hooks/scripts/clang-format.sh\n${PRE_COMMIT_SCRIPTS}")
             set(_write_hook TRUE)
         endif()
+    endif()
+
+    list(FIND ARG_CHECKS "JSON_SCHEMA" _index)
+    if (${_index} GREATER -1)
+      if (KDE_CHECK_JSONSCHEMA_EXECUTABLE)
+        set(PRE_COMMIT_SCRIPTS "set -e\npython3 ${JSON_SCHEMA_SCRIPT} \"${JSON_SCHEMA_DEFINITION}\"\n${PRE_COMMIT_SCRIPTS}")
+      else()
+        message(WARNING "check-jsonschema executabe not found. Please install it using pip or using your package manager")
+      endif()
     endif()
 
 
