@@ -82,7 +82,7 @@ function(KDE_CONFIGURE_GIT_PRE_COMMIT_HOOK)
 
         if(_gitresult EQUAL 0)
 			  if(NOT ${GIT_HOOKS_DIR} EQUAL "${_gitoutput}")
-                message(WARNING "Git config value core.hooksPath is set to '${_gitoutput}'. Your git commit hooks will likely not be executed.")
+                message(WARNING "Git is configured to use '${_gitoutput}' for hooks. Your commit hooks will likely not be executed.")
             endif()
         endif()
 	endif()
