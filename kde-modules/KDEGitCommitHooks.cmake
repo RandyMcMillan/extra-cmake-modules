@@ -63,7 +63,7 @@ function(KDE_CONFIGURE_GIT_PRE_COMMIT_HOOK)
     if(NOT ARG_CHECKS)
         message(FATAL_ERROR "No checks were specified")
     endif()
-	 set(GIT_HOOKS_DIR "${CMAKE_SOURCE_DIR}/.git")
+	 set(GIT_HOOKS_DIR "${CMAKE_SOURCE_DIR}/.git/hooks")
 
 	 if (NOT IS_DIRECTORY ${GIT_HOOKS_DIR} # In case of tarballs there is no .git directory
         OR NOT (UNIX OR WIN32)
