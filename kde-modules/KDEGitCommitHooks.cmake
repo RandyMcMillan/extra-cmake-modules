@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: 2020 Alexander Lohnau <alexander.lohnau@gmx.de>
 # SPDX-FileCopyrightText: 2022 Ahmad Samir <a.samirh78@gmail.com>
+# SPDX-FileCopyrightText: 2023 Johannes Zarl-Zierl <johannes@zarl-zierl.at>
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
@@ -21,6 +22,7 @@ This module provides the following function:
 
 This function will create a pre-commit hook which contains all the given checks.
 In addition to that, you can pass in paths to custom scripts that will be run as the pre-commit hook.
+If a custom hooks directory is set via ``core.hooksPath``, a warning is issued.
 
 Checks:
 
@@ -68,6 +70,23 @@ function(KDE_CONFIGURE_GIT_PRE_COMMIT_HOOK)
     )
         return()
     endif()
+	find_package(Git QUIET)
+	if(GIT_FOUND)
+        # if git is not found, we don't have to care about commit hooks anyway
+        execute_process(COMMAND "${GIT_EXECUTABLE}" config --default "${CMAKE_SOURCE_DIR}/.git" --get core.hooksPath
+            WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+            RESULT_VARIABLE _gitresult
+            OUTPUT_VARIABLE _gitoutput
+            ERROR_QUIET
+            OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+        if(_gitresult EQUAL 0)
+            if(NOT ${GIT_DIR} EQUAL "${_gitoutput}")
+                message(WARNING "Git config value core.hooksPath is set to a non-standard value. Your git commit hooks will likely not be executed.")
+            endif()
+        endif()
+	endif()
+
     if (COMMAND KDE_CLANG_FORMAT)
         set(HAS_CLANG_FORMAT_COMMAND_INCLUDED TRUE)
     else()
