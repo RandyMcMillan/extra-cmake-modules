@@ -63,28 +63,28 @@ function(KDE_CONFIGURE_GIT_PRE_COMMIT_HOOK)
     if(NOT ARG_CHECKS)
         message(FATAL_ERROR "No checks were specified")
     endif()
+
     set(GIT_HOOKS_DIR "${CMAKE_SOURCE_DIR}/.git/hooks")
+    find_package(Git QUIET)
 
     if (NOT IS_DIRECTORY ${GIT_HOOKS_DIR} # In case of tarballs there is no .git directory
         OR NOT (UNIX OR WIN32)
+        OR NOT GIT_FOUND
     )
         return()
     endif()
-    find_package(Git QUIET)
-    if(GIT_FOUND)
-        # if git is not found, we don't have to care about commit hooks anyway
-        execute_process(COMMAND "${GIT_EXECUTABLE}" config --get core.hooksPath
-            WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-            RESULT_VARIABLE _gitresult
-            OUTPUT_VARIABLE _gitoutput
-            ERROR_QUIET
-            OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-        if(_gitresult EQUAL 0)
-            if(NOT ${GIT_HOOKS_DIR} EQUAL "${_gitoutput}")
-                message(WARNING "Git is configured to use '${_gitoutput}' for hooks. Your commit hooks will likely not be executed.")
-            endif()
-        endif()
+    execute_process(COMMAND "${GIT_EXECUTABLE}" config --get core.hooksPath
+        WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+        RESULT_VARIABLE _gitresult
+        OUTPUT_VARIABLE _gitoutput
+        ERROR_QUIET
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+    if(_gitresult EQUAL 0
+        AND NOT ${GIT_HOOKS_DIR} EQUAL "${_gitoutput}"
+    )
+        message(WARNING "Git is configured to use '${_gitoutput}' for hooks. Your commit hooks will likely not be executed.")
     endif()
 
     if (COMMAND KDE_CLANG_FORMAT)
