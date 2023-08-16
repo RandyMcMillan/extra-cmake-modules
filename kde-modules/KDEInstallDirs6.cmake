@@ -72,8 +72,6 @@ where ``<dir>`` is one of (default values in parentheses):
     kconfig description files (``DATAROOTDIR/config.kcfg``)
 ``KCONFUPDATEDIR``
     kconf_update scripts (``DATAROOTDIR/kconf_update``)
-``KXMLGUIDIR``
-    kxmlgui .rc files (``DATAROOTDIR/kxmlgui5``)
 ``KAPPTEMPLATESDIR``
     KAppTemplate and KDevelop templates (``DATAROOTDIR/kdevappwizard/templates``)
 ``KFILETEMPLATESDIR``
@@ -263,7 +261,7 @@ endif()
 # KDE Framework-specific things
 _define_relative(KNOTIFYRCDIR DATAROOTDIR "knotifications6"
     "knotify description files")
-# TODO MOVE TO KXMLGUI
+# KF6 TODO: remove for ECM 6.0, together with deprecation warning below
 _define_relative(KXMLGUIDIR DATAROOTDIR "kxmlgui5"
     "kxmlgui .rc files")
 _define_relative(LOGGINGCATEGORIESDIR DATAROOTDIR "qlogging-categories6"
@@ -297,5 +295,23 @@ if(APPLE)
     set(KF_INSTALL_TARGETS_DEFAULT_ARGS  ${KF_INSTALL_TARGETS_DEFAULT_ARGS}
                                           BUNDLE DESTINATION "${BUNDLE_INSTALL_DIR}" )
 endif()
+
+# warn about outdated variables
+function(_deprecate_KXMLGUIDIR varname access_type newvarname)
+    if(access_type STREQUAL "READ_ACCESS")
+        message(DEPRECATION "${varname} will be gone for ECM 6.0. Use \${${newvarname}}/<component>/kxmlgui6 instead (or deploy via qrc). Check also KF's KXmlGui5ConfigMigration.")
+    endif()
+endfunction()
+
+function(_deprecate_KDE_INSTALL_KXMLGUIDIR varname access_type)
+    _deprecate_KXMLGUIDIR(${varname} ${access_type} KDE_INSTALL_CONFDIR)
+endfunction()
+
+function(_deprecate_KDE_INSTALL_FULL_KXMLGUIDIR varname access_type)
+    _deprecate_KXMLGUIDIR(${varname} ${access_type} KDE_INSTALL_FULL_CONFDIR)
+endfunction()
+
+variable_watch(KDE_INSTALL_KXMLGUIDIR _deprecate_KDE_INSTALL_KXMLGUIDIR)
+variable_watch(KDE_INSTALL_FULL_KXMLGUIDIR _deprecate_KDE_INSTALL_FULL_KXMLGUIDIR)
 
 include(${CMAKE_CURRENT_LIST_DIR}/KDESetupPrefixScript.cmake)
