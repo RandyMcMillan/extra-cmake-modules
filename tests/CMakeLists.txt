@@ -138,12 +138,17 @@ if(TARGET Qt5::Core)
                      KDEInstallDirsTest.vars_in_sync dummy)
 endif()
 
+# KDEInstallDirs6 has KXMLGUIDIR relative to CONFDIR
+if(TARGET Qt6::Core)
+    set(_kxmlguidir_should_be_absolut "-DKXMLGUIDIR_should_be_absolute=TRUE")
+endif()
 set(KDEInstallDirsTest.relative_or_absolute_usr_EXTRA_OPTIONS
     --build-options -DCMAKE_INSTALL_PREFIX=/usr
                     -DKDE_INSTALL_USE_QT_SYS_PATHS=FALSE
                     -DAUTOSTARTDIR_should_be_absolute=TRUE
                     -DCONFDIR_should_be_absolute=TRUE
                     -DSYSCONFDIR_should_be_absolute=TRUE
+                    ${_kxmlguidir_should_be_absolut}
     )
 add_test_variant(KDEInstallDirsTest.relative_or_absolute_usr
                  KDEInstallDirsTest.relative_or_absolute dummy)
