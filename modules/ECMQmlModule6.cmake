@@ -103,10 +103,15 @@ function(ecm_target_qml_sources ARG_TARGET)
 endfunction()
 
 function(ecm_finalize_qml_module ARG_TARGET)
-    cmake_parse_arguments(PARSE_ARGV 1 ARG "" "DESTINATION;" "")
+    cmake_parse_arguments(PARSE_ARGV 1 ARG "" "DESTINATION;VERSION" "")
 
     if ("${ARG_DESTINATION}" STREQUAL "")
         message(FATAL_ERROR "ecm_finalize_qml_module called without required argument DESTINATION")
+    endif()
+
+    set(_version "${PROJECT_VERSION}")
+    if (ARG_VERSION)
+        set(_version "${ARG_VERSION}")
     endif()
 
     # This is effectively a workaround for missing upstream API, see QTBUG-100102
@@ -163,4 +168,7 @@ function(ecm_finalize_qml_module ARG_TARGET)
             install(FILES "${src_file}" DESTINATION "${module_dir}/${dest_dir}" RENAME "${dst_name}")
         endforeach()
     endif()
+
+    file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/kde-qmlmodule.version" CONTENT "${_version}\n")
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/kde-qmlmodule.version" DESTINATION "${module_dir}")
 endfunction()
