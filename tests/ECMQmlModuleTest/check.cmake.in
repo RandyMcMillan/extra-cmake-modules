@@ -8,6 +8,7 @@ set(INSTALL_DIR "@CMAKE_INSTALL_PREFIX@/test")
 set(SHARED "@BUILD_SHARED_LIBS@")
 set(QML_ONLY "@QML_ONLY@")
 set(DEPENDS "@DEPENDS@")
+set(QT_VERSION "@QT_MAJOR_VERSION@")
 
 function(check_file_exists file)
     if (NOT EXISTS ${file})
@@ -37,6 +38,20 @@ if (SHARED)
         EXPECTED "${SOURCE_DIR}/QmlModule.qml"
     )
 
+    if (QML_ONLY AND NOT DEPENDS)
+        check_file_contents(
+            GENERATED "${INSTALL_DIR}/Test/qmldir"
+            EXPECTED "${SOURCE_DIR}/qmldir_expected_qmlonly_qt${QT_VERSION}"
+        )
+    endif()
+
+    if (DEPENDS)
+        check_file_contents(
+            GENERATED "${INSTALL_DIR}/Test/qmldir"
+            EXPECTED "${SOURCE_DIR}/qmldir_expected_depends_qt${QT_VERSION}"
+        )
+    endif()
+
     if (NOT QML_ONLY AND NOT DEPENDS)
         if (WIN32)
             check_file_exists("${INSTALL_DIR}/Test/TestModule.dll")
@@ -46,27 +61,21 @@ if (SHARED)
 
         check_file_contents(
             GENERATED "${INSTALL_DIR}/Test/qmldir"
-            EXPECTED "${SOURCE_DIR}/qmldir_expected_full"
-        )
-    endif()
-
-    if (QML_ONLY AND NOT DEPENDS)
-        check_file_contents(
-            GENERATED "${INSTALL_DIR}/Test/qmldir"
-            EXPECTED "${SOURCE_DIR}/qmldir_expected_qmlonly"
-        )
-    endif()
-
-    if (DEPENDS)
-        check_file_contents(
-            GENERATED "${INSTALL_DIR}/Test/qmldir"
-            EXPECTED "${SOURCE_DIR}/qmldir_expected_depends"
+            EXPECTED "${SOURCE_DIR}/qmldir_expected_full_qt${QT_VERSION}"
         )
     endif()
 else()
-    if (WIN32)
-        check_file_exists("${INSTALL_DIR}/Test/TestModule.lib")
+    if (${QT_VERSION} LESS 6)
+        if (WIN32)
+            check_file_exists("${INSTALL_DIR}/Test/TestModule.lib")
+        else()
+            check_file_exists("${INSTALL_DIR}/Test/libTestModule.a")
+        endif()
     else()
-        check_file_exists("${INSTALL_DIR}/Test/libTestModule.a")
+        if (WIN32)
+            check_file_exists("@CMAKE_INSTALL_PREFIX@/lib/TestModule.a")
+        else()
+            check_file_exists("@CMAKE_INSTALL_PREFIX@/lib/libTestModule.a")
+        endif()
     endif()
 endif()
