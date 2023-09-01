@@ -66,20 +66,20 @@ function(ecm_add_qml_module ARG_TARGET)
     endif()
 
     if (NOT TARGET ${ARG_TARGET})
+        set(_use_plugin_target TRUE)
         list(APPEND _arguments PLUGIN_TARGET ${ARG_TARGET})
-    endif()
-
-    if (BUILD_SHARED_LIBS)
-        list(APPEND _arguments SHARED)
-    else()
-        list(APPEND _arguments STATIC)
+        if (BUILD_SHARED_LIBS)
+            list(APPEND _arguments SHARED)
+        else()
+            list(APPEND _arguments STATIC)
+        endif()
     endif()
 
     list(APPEND _arguments ${ARG_UNPARSED_ARGUMENTS})
 
     qt6_add_qml_module(${_arguments})
 
-    if (NOT WIN32)
+    if (NOT WIN32 AND ${_use_plugin_target})
         # KDECMakeSettings sets the prefix to empty but Qt will not load a QML
         # plugin without prefix. So we need to force it here.
         set_target_properties(${ARG_TARGET} PROPERTIES PREFIX "lib")
@@ -107,12 +107,17 @@ function(ecm_target_qml_sources ARG_TARGET)
 
     foreach(_path ${ARG_SOURCES})
         get_filename_component(_file "${_path}" NAME)
+        get_filename_component(_ext "${_path}" EXT)
         set(_resource_alias "${_file}")
         if (ARG_PATH)
             set(_resource_alias "${ARG_PATH}/${_file}")
         endif()
         set_source_files_properties("${_path}" PROPERTIES QT_RESOURCE_ALIAS "${_resource_alias}")
-        qt6_target_qml_sources(${ARG_TARGET} QML_FILES "${_path}" ${ARG_UNPARSED_ARGUMENTS})
+        if ("${_ext}" MATCHES "(.qml|.js|.mjs)")
+            qt6_target_qml_sources(${ARG_TARGET} QML_FILES "${_path}" ${ARG_UNPARSED_ARGUMENTS})
+        else()
+            qt6_target_qml_sources(${ARG_TARGET} RESOURCES "${_path}" ${ARG_UNPARSED_ARGUMENTS})
+        endif()
     endforeach()
 endfunction()
 
@@ -146,7 +151,10 @@ function(ecm_finalize_qml_module ARG_TARGET)
 
     set(module_dir "${ARG_DESTINATION}/${module_target_path}")
 
-    # Install the QML module runtime loadable plugin
+    if (NOT TARGET "${module_plugin_target}")
+        return()
+    endif()
+
     install(TARGETS "${module_plugin_target}"
         LIBRARY DESTINATION "${module_dir}"
         RUNTIME DESTINATION "${module_dir}"
