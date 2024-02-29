@@ -17,12 +17,12 @@ set_package_properties(
         PURPOSE "Required to build documentation for Extra CMake Modules."
 )
 
-find_package(QCollectionGenerator MODULE)
+find_package(QHelpGenerator MODULE)
 set_package_properties(
-    QCollectionGenerator
+    QHelpGenerator
     PROPERTIES
         URL "https://www.qt.io/"
-        DESCRIPTION "Qt help collection generator."
+        DESCRIPTION "Qt help generator."
         TYPE OPTIONAL
         PURPOSE "Required to build Extra CMake Modules documentation in Qt Help format."
 )
@@ -41,7 +41,7 @@ add_feature_info(BUILD_MAN_DOCS BUILD_MAN_DOCS "Generate man page documentation 
 
 cmake_dependent_option(
     BUILD_QTHELP_DOCS "Build Qt help with Sphinx" OFF
-    "Sphinx_FOUND;QCollectionGenerator_FOUND" OFF
+    "Sphinx_FOUND;QHelpGenerator_FOUND" OFF
 )
 add_feature_info(BUILD_QTHELP_DOCS BUILD_QTHELP_DOCS "Generate QtHelp documentation for installed modules.")
 
@@ -57,7 +57,7 @@ if(BUILD_QTHELP_DOCS)
     list(APPEND doc_formats qthelp)
     set(qthelp_extra_commands
         COMMAND
-            QCollectionGenerator::Generator
+            QHelpGenerator::Generator
             ${CMAKE_CURRENT_BINARY_DIR}/qthelp/ExtraCMakeModules.qhcp
     )
 endif()
