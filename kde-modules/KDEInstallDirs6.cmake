@@ -13,9 +13,6 @@
 KDEInstallDirs6
 ---------------
 
-THIS IS CURRENTLY ONLY AN ALPHA VERSION, FOR FRAMEWORKS USAGE ONLY,
-AND TO BE MODIFIED INCREMENTALLY. PLEASE DO NOT USE IN APPLICATIONS YET.
-
 Define KDE standard installation directories for Qt6/KF6 based software.
 
 Note that none of the variables defined by this module provide any
@@ -50,11 +47,11 @@ where ``<dir>`` is one of (default values in parentheses):
 ``CMAKEPACKAGEDIR``
     CMake packages, including config files (``LIBDIR/cmake``)
 ``QTPLUGINDIR``
-    Qt plugins (``LIBDIR/plugins`` or qmake-qt5's ``QT_INSTALL_PLUGINS``)
+    Qt plugins (``LIBDIR/plugins`` or qtpaths's ``QT_INSTALL_PLUGINS``)
 ``PLUGINDIR``
     Plugins (``QTPLUGINDIR``) [``PLUGIN_INSTALL_DIR``]
 ``QMLDIR``
-    QtQuick2 imports (``LIBDIR/qml`` or qmake-qt5's ``QT_INSTALL_QML``)
+    QtQuick2 imports (``LIBDIR/qml`` or qtpaths's ``QT_INSTALL_QML``)
 ``INCLUDEDIR``
     C and C++ header files (``include``)
 ``LOCALSTATEDIR``
@@ -100,7 +97,7 @@ where ``<dir>`` is one of (default values in parentheses):
 ``METAINFODIR``
     AppStream component metadata files (``DATAROOTDIR/metainfo``)
 ``QTQCHDIR``
-    documentation bundles in QCH format for Qt-extending libraries (``DATAROOTDIR/doc/qch`` or qmake-qt5's ``QT_INSTALL_DOCS``)
+    documentation bundles in QCH format for Qt-extending libraries (``DATAROOTDIR/doc/qch`` or qtpaths's ``QT_INSTALL_DOCS``)
 ``QCHDIR``
     documentation bundles in QCH format (``DATAROOTDIR/doc/qch``)
 ``MANDIR``
@@ -157,6 +154,13 @@ can be changed using CMake command line variable definitions; in either case,
 both forms of the variable will be affected. The effect of passing multiple
 forms of the same variable on the command line
 (such as ``KDE_INSTALL_BINDIR`` and ``CMAKE_INSTALL_BINDIR`` is undefined.
+
+Note that including ``GNUInstallDirs``, which defines ``CMAKE_INSTALL_<dir>``
+variables, before ``include(KDEInstallDirs)`` has the same effect as using the
+CMake command line. This is likely unintended and hence should be avoided.
+If you need ``GNUInstallDirs``, include it after ``KDEInstallDirs``.
+Qt uses ``GNUInstallDirs`` since Qt6 hence ``find_package(Qt6 ...)`` is equivalent
+to ``include(GNUInstallDirs)`` in this case.
 
 The variable ``KDE_INSTALL_TARGETS_DEFAULT_ARGS`` is also defined.
 This should be used when libraries or user-executable applications are installed,
