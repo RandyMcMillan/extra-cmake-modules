@@ -60,6 +60,15 @@ endif()
 # Current defaults
 include(KDECompilerSettings NO_POLICY_SCOPE)
 
+# TEMPORARY: enabling before KF 6.2 dep bumps which otherwise trigger addition by default KDE_COMPILERSETTINGS_LEVEL
+if(ECM_GLOBAL_FIND_VERSION VERSION_LESSER 6.2.0)
+    add_definitions(
+        -DQT_NO_CONTEXTLESS_CONNECT
+    )
+else()
+    message(FATAL "Remove this before release after KF ECM deps are bumped to 6.2")
+endif()
+
 # add clang-format target
 include(KDEClangFormat)
 file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES *.cpp *.h *.hpp *.c)

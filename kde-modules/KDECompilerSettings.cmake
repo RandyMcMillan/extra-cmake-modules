@@ -91,7 +91,7 @@ The following C++ compiler flags are set:
 
 - ``-Werror=undef`` (GNU and Clang compilers, since 5.96.0)
 
-- Qt related preprocessor definitions (since 5.85.0):
+- Qt related preprocessor definitions (since 5.85.0, unless otherwise stated):
 
   - ``-DQT_NO_CAST_TO_ASCII``
   - ``-DQT_NO_CAST_FROM_ASCII``
@@ -102,11 +102,13 @@ The following C++ compiler flags are set:
   - ``-DQT_NO_KEYWORDS``
   - ``-DQT_NO_FOREACH``
   - ``-DQT_STRICT_ITERATORS``
+  - ``-DQT_NO_CONTEXTLESS_CONNECT`` (since 6.2.0)
 
     Strict iterators are not enabled on Windows, because they lead
     to a link error when application code iterates over a QVector<QPoint> for
     instance, unless Qt itself was also built with strict iterators.
     See example at https://bugreports.qt.io/browse/AUTOSUITE-946
+
 
   Can be controlled by setting ``KDE_QT_MODERNCODE_DEFINITIONS_LEVEL`` to the
   version of ECM where the wanted set of definitions has been added
@@ -713,6 +715,11 @@ if (KDE_INTERNAL_QT_MODERNCODE_DEFINITIONS_LEVEL VERSION_GREATER_EQUAL "5.85.0")
         # See example at https://bugreports.qt.io/browse/AUTOSUITE-946
         add_definitions(-DQT_STRICT_ITERATORS)
     endif()
+endif()
+if (KDE_INTERNAL_QT_MODERNCODE_DEFINITIONS_LEVEL VERSION_GREATER_EQUAL "6.2.0")
+    add_definitions(
+        -DQT_NO_CONTEXTLESS_CONNECT
+    )
 endif()
 
 _kde_set_default_skip_variable_by_min_ecm(KDE_SKIP_PEDANTIC_WARNINGS_SETTINGS "5.85.0")
