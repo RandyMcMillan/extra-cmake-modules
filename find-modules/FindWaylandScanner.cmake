@@ -37,7 +37,7 @@ implementations:
   ecm_add_wayland_client_protocol(<target>
                                   PROTOCOL <xmlfile>
                                   BASENAME <basename>
-                                  [PRIVATE])
+                                  [PRIVATE_CODE])
 
   ecm_add_wayland_client_protocol(<source_files_var>
                                   PROTOCOL <xmlfile>
@@ -47,7 +47,7 @@ Generate Wayland client protocol files from ``<xmlfile>`` XML
 definition for the ``<basename>`` interface and append those files
 to ``<source_files_var>`` or ``<target>``.
 
-``PRIVATE`` instructs wayland-scanner to hide marshalling code
+``PRIVATE_CODE`` instructs wayland-scanner to hide marshalling code
 from the compiled DSO for use in other DSOs. The default is to
 export this code.
 
@@ -100,7 +100,7 @@ set_package_properties(WaylandScanner PROPERTIES
 
 function(ecm_add_wayland_client_protocol target_or_sources_var)
     # Parse arguments
-    set(options PRIVATE)
+    set(options PRIVATE_CODE)
     set(oneValueArgs PROTOCOL BASENAME)
     cmake_parse_arguments(ARGS "${options}" "${oneValueArgs}" "" ${ARGN})
 
@@ -111,7 +111,7 @@ function(ecm_add_wayland_client_protocol target_or_sources_var)
     get_filename_component(_infile ${ARGS_PROTOCOL} ABSOLUTE)
     set(_client_header "${CMAKE_CURRENT_BINARY_DIR}/wayland-${ARGS_BASENAME}-client-protocol.h")
     set(_code "${CMAKE_CURRENT_BINARY_DIR}/wayland-${ARGS_BASENAME}-protocol.c")
-    if(ARGS_PRIVATE)
+    if(ARGS_PRIVATE_CODE)
         set(_code_type private-code)
     else()
         set(_code_type public-code)
