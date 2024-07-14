@@ -125,12 +125,30 @@ class ECMModule(Directive):
         self.state_machine.insert_input(lines, path)
         return []
 
+def _make_index_entry_key(title: str) -> str:
+    """ One letter key so sort them in the Index. """
+    # Strip common prefixes
+    for prefix in ["ECM", "Find", "KDE"]:
+        if title.startswith(prefix):
+            title = title[len(prefix):]
+            break  # Avoid stripping more than once, e.g. ECMFindModuleHelpers
+    return title[0]
+
 class _ecm_index_entry:
+    """
+    This class is a factory for ``sphinx.addnodes.index['entries']`` tuples.
+    """
     def __init__(self, desc):
         self.desc = desc
 
     def __call__(self, title, targetid):
-        return ('pair', u'%s ; %s' % (self.desc, title), targetid, 'main', None)
+        return (
+            'pair',                           # entrytype
+            '%s ; %s' % (self.desc, title),   # entryname
+            targetid,                         # target
+            'main',                           # ignored
+            _make_index_entry_key(title),     # key
+        )
 
 _ecm_index_objs = {
     'manual':      _ecm_index_entry('manual'),
