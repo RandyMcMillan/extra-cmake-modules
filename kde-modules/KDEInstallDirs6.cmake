@@ -155,6 +155,13 @@ both forms of the variable will be affected. The effect of passing multiple
 forms of the same variable on the command line
 (such as ``KDE_INSTALL_BINDIR`` and ``CMAKE_INSTALL_BINDIR`` is undefined.
 
+Note that including ``GNUInstallDirs``, which defines ``CMAKE_INSTALL_<dir>``
+variables, before ``include(KDEInstallDirs)`` has the same effect as using the
+CMake command line. This is likely unintended and hence should be avoided.
+If you need ``GNUInstallDirs``, include it after ``KDEInstallDirs``.
+Qt uses ``GNUInstallDirs`` since Qt6 hence ``find_package(Qt6 ...)`` is equivalent
+to ``include(GNUInstallDirs)`` in this case.
+
 The variable ``KDE_INSTALL_TARGETS_DEFAULT_ARGS`` is also defined.
 This should be used when libraries or user-executable applications are installed,
 in the following manner:
