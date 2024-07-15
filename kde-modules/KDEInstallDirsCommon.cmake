@@ -253,8 +253,15 @@ else()
         LIBEXEC_INSTALL_DIR)
 endif()
 
-_define_relative(CMAKEPACKAGEDIR LIBDIR "cmake"
-    "CMake packages, including config files"
+_define_relative(CMAKEARCHEDPACKAGEDIR LIBDIR "cmake"
+    "Architecture-dependent CMake packages, including config files"
+    KDE_INSTALL_CMAKEPACKAGEDIR)
+
+_define_relative(CMAKENOARCHPACKAGEDIR DATADIR "cmake"
+    "Architecture-independent CMake packages, including config files")
+
+_define_relative(CMAKEPACKAGEDIR CMAKEARCHEDPACKAGEDIR ""
+    "Architecture-dependent CMake packages, including config files"
     CMAKECONFIG_INSTALL_PREFIX)
 
 _define_absolute(INCLUDEDIR "include"
