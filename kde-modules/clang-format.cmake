@@ -35,6 +35,9 @@ SortIncludes: true
 # break before braces on function, namespace and class definitions.
 BreakBeforeBraces: Linux
 
+# break after a C++ attributes
+BreakAfterAttributes: Always
+
 # CrlInstruction *a;
 PointerAlignment: Right
 
